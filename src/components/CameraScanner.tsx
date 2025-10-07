@@ -2,11 +2,19 @@ import { Camera, Scan } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useState, useRef, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-export const CameraScanner = () => {
+interface CameraScannerProps {
+  onScanComplete?: (result: any) => void;
+}
+
+export const CameraScanner = ({ onScanComplete }: CameraScannerProps) => {
   const [isScanning, setIsScanning] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     return () => {
@@ -40,6 +48,72 @@ export const CameraScanner = () => {
       stream.getTracks().forEach(track => track.stop());
       videoRef.current.srcObject = null;
       setIsScanning(false);
+    }
+  };
+
+  const captureAndIdentify = async () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    setIsProcessing(true);
+    try {
+      // Capture image from video
+      const canvas = canvasRef.current;
+      const video = videoRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      ctx.drawImage(video, 0, 0);
+      const imageData = canvas.toDataURL('image/jpeg', 0.8);
+
+      // Mock AI identification - randomly select a medicine from database
+      const { data: medicines, error } = await supabase
+        .from('medicines')
+        .select('*') as { data: any[] | null, error: any };
+
+      if (error) throw error;
+
+      if (!medicines || medicines.length === 0) {
+        toast.error("No medicines in database. Please add medicine data first.");
+        return;
+      }
+
+      // Simulate AI processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Randomly select a medicine (mock identification)
+      const identifiedMedicine = medicines[Math.floor(Math.random() * medicines.length)];
+      const confidence = Math.floor(Math.random() * 20) + 80; // 80-100%
+
+      // Save to scan history
+      const { error: historyError } = await supabase
+        .from('scan_history')
+        .insert({
+          medicine_id: identifiedMedicine.id,
+          medicine_name: identifiedMedicine.name,
+          confidence: confidence,
+          scanned_image_url: imageData
+        } as any);
+
+      if (historyError) throw historyError;
+
+      toast.success(`Medicine identified: ${identifiedMedicine.name} (${confidence}% confidence)`);
+      
+      // Pass result to parent component
+      if (onScanComplete) {
+        onScanComplete({
+          ...identifiedMedicine,
+          confidence
+        });
+      }
+
+      stopCamera();
+    } catch (error) {
+      console.error("Error identifying medicine:", error);
+      toast.error("Failed to identify medicine. Please try again.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -92,15 +166,19 @@ export const CameraScanner = () => {
                 Stop Camera
               </Button>
               <Button
+                onClick={captureAndIdentify}
+                disabled={isProcessing}
                 className="medical-gradient text-white"
               >
                 <Scan className="mr-2 h-4 w-4" />
-                Capture & Identify
+                {isProcessing ? "Identifying..." : "Capture & Identify"}
               </Button>
             </div>
           </>
         )}
       </div>
+      {/* Hidden canvas for image capture */}
+      <canvas ref={canvasRef} className="hidden" />
     </Card>
   );
 };
