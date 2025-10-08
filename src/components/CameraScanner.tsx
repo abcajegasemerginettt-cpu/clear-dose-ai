@@ -77,9 +77,10 @@ export const CameraScanner = ({ onScanComplete }: CameraScannerProps) => {
       const imageData = canvas.toDataURL('image/jpeg', 0.8);
 
       // Mock AI identification - randomly select a medicine from database
-      const { data: medicines, error } = await supabase
+      const sb = supabase as any;
+      const { data: medicines, error } = await sb
         .from('medicines')
-        .select('*') as { data: any[] | null, error: any };
+        .select('*');
 
       if (error) throw error;
 
@@ -96,14 +97,14 @@ export const CameraScanner = ({ onScanComplete }: CameraScannerProps) => {
       const confidence = Math.floor(Math.random() * 20) + 80; // 80-100%
 
       // Save to scan history
-      const { error: historyError } = await supabase
+      const { error: historyError } = await sb
         .from('scan_history')
         .insert({
           medicine_id: identifiedMedicine.id,
           medicine_name: identifiedMedicine.name,
           confidence: confidence,
           scanned_image_url: imageData
-        } as any);
+        });
 
       if (historyError) throw historyError;
 
