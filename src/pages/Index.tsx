@@ -41,9 +41,9 @@ const Index = () => {
 
   const handleMedicineSelection = (medicine: Medicine) => {
     setScannedMedicine(medicine);
-    // Clear suggestions after selection but keep classifiedType for display
+    // Clear suggestions after selection
     setMedicineSuggestions([]);
-    // Keep classifiedType so it shows in MedicineInfo
+    setClassifiedType(null);
   };
 
   return (
@@ -52,7 +52,7 @@ const Index = () => {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-medical-accent/5" />
         <div className="relative container mx-auto px-4 py-16">
-          <div className="text-center space-y-6 mb-16">
+          <div className="text-center space-y-6 mb-auto">
             <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-medical-red-light to-medical-accent bg-clip-text text-transparent">
               MedLens AI
             </h1>
@@ -60,8 +60,7 @@ const Index = () => {
               Instantly identify medicines using advanced AI technology. 
               Scan tablets and capsules for detailed information and safety guidance.
             </p>
-            
-            {/* Feature highlights */}
+          {/*
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-4xl mx-auto">
               <div className="flex flex-col items-center gap-4 p-6 rounded-2xl glass-card">
                 <div className="rounded-full bg-primary/10 p-4">
@@ -93,6 +92,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
+          */}
           </div>
         </div>
       </div>
@@ -118,10 +118,7 @@ const Index = () => {
                 onSelectMedicine={handleMedicineSelection}
               />
             ) : (
-              <MedicineInfo 
-                medicine={scannedMedicine} 
-                classifiedType={classifiedType}
-              />
+              <MedicineInfo medicine={scannedMedicine} />
             )}
           </div>
         </div>
@@ -141,7 +138,7 @@ const Index = () => {
               <span className="font-semibold">MedLens AI</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 MedLens AI. All rights reserved.
+              © 2025 MedLens AI. All rights reserved.
             </p>
             <p className="text-xs text-muted-foreground max-w-2xl mx-auto">
               <strong>Disclaimer:</strong> This app is for informational purposes only. 
