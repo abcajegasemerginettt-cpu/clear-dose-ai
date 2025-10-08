@@ -1,28 +1,18 @@
-# Welcome to your Lovable project
+💊 Welcome to Your MedLens AI Project
+📘 Project Info
 
-## Project info
+Project Name: MedLens AI
+Description: An AI-powered web application that identifies tablets and capsules through live camera scanning, using a TensorFlow-trained model and Supabase as the backend for medicine data management.
 
-**URL**: https://lovable.dev/projects/45d9a875-6731-452a-83f0-cfdd3cbfb02d
+🧠 How to Edit This Code
 
-## How can I edit this code?
+There are several ways you can edit and develop your application.
 
-There are several ways of editing your application.
+Option 1: Work Locally Using Your IDE
 
-**Use Lovable**
+If you prefer using your own development environment (such as VS Code or WebStorm), follow these steps:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/45d9a875-6731-452a-83f0-cfdd3cbfb02d) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
+🪄 Steps
 # Step 1: Clone the repository using the project's Git URL.
 git clone <YOUR_GIT_URL>
 
@@ -32,42 +22,81 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server with auto-reloading and instant preview.
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Once the server is running, open your browser and visit http://localhost:5173 (or the port displayed in your terminal) to preview your project live.
 
-**Use GitHub Codespaces**
+Option 2: Edit Files Directly on GitHub
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Navigate to the desired file(s) in your repository.
 
-## What technologies are used for this project?
+Click the Edit (pencil icon) on the top right of the file view.
 
-This project is built with:
+Make your changes and commit directly to your main branch.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Option 3: Use GitHub Codespaces
 
-## How can I deploy this project?
+Go to your repository’s main page on GitHub.
 
-Simply open [Lovable](https://lovable.dev/projects/45d9a875-6731-452a-83f0-cfdd3cbfb02d) and click on Share -> Publish.
+Click on the Code (green) button near the top right.
 
-## Can I connect a custom domain to my Lovable project?
+Select the Codespaces tab.
 
-Yes, you can!
+Click New codespace to launch a cloud-based development environment.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Edit and test your code directly in the browser, then commit and push changes when ready.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+⚙️ Technologies Used in This Project
+
+This project is built using the following technologies:
+
+Technology	Purpose
+Vite	Frontend build tool for fast development
+TypeScript	Type-safe JavaScript for scalability
+React	Component-based UI framework
+shadcn-ui	Prebuilt UI components for modern interfaces
+Tailwind CSS	Utility-first CSS framework for styling
+TensorFlow / TensorFlow.js	AI model training and browser-based prediction
+Supabase	Backend database and API for medicine data management
+🚀 How to Deploy This Project
+
+You can deploy your MedLens AI web app to your preferred hosting platform such as:
+
+Vercel
+
+Netlify
+
+Render
+
+GitHub Pages
+
+Deployment Steps (Example: Vercel)
+
+Go to vercel.com
+ and sign in with GitHub.
+
+Click “New Project” and import your repository.
+
+Configure build settings:
+
+Build Command: npm run build
+
+Output Directory: dist
+
+Click Deploy.
+
+Once deployed, your site will be live at https://your-app-name.vercel.app.
+
+🌐 Connecting a Custom Domain
+
+If you want your app to have a custom domain (e.g., medlensai.com):
+
+Go to your hosting provider’s Domain Settings.
+
+Click Connect Domain.
+
+Add your domain name and update your DNS records as instructed.
+
+Wait for DNS propagation (usually a few minutes).
