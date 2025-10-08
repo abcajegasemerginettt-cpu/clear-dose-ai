@@ -33,12 +33,21 @@ export const CameraScanner = ({ onScanComplete }: CameraScannerProps) => {
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        
+        // Wait for metadata to load and explicitly start playback
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current?.play().catch(err => {
+            console.error("Error playing video:", err);
+          });
+        };
+        
         setHasPermission(true);
         setIsScanning(true);
       }
     } catch (err) {
       console.error("Error accessing camera:", err);
       setHasPermission(false);
+      toast.error("Camera access denied. Please enable camera permissions.");
     }
   };
 

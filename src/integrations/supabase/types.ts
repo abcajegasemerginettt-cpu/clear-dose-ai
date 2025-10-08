@@ -14,7 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      medicines: {
+        Row: {
+          created_at: string
+          description: string | null
+          dosage: string | null
+          id: string
+          image_features: Json | null
+          manufacturer: string | null
+          name: string
+          side_effects: Json | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          dosage?: string | null
+          id?: string
+          image_features?: Json | null
+          manufacturer?: string | null
+          name: string
+          side_effects?: Json | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          dosage?: string | null
+          id?: string
+          image_features?: Json | null
+          manufacturer?: string | null
+          name?: string
+          side_effects?: Json | null
+        }
+        Relationships: []
+      }
+      scan_history: {
+        Row: {
+          confidence: number | null
+          id: string
+          medicine_id: string | null
+          medicine_name: string | null
+          scanned_at: string
+          scanned_image_url: string | null
+        }
+        Insert: {
+          confidence?: number | null
+          id?: string
+          medicine_id?: string | null
+          medicine_name?: string | null
+          scanned_at?: string
+          scanned_image_url?: string | null
+        }
+        Update: {
+          confidence?: number | null
+          id?: string
+          medicine_id?: string | null
+          medicine_name?: string | null
+          scanned_at?: string
+          scanned_image_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_history_medicine_id_fkey"
+            columns: ["medicine_id"]
+            isOneToOne: false
+            referencedRelation: "medicines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
