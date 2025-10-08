@@ -1,20 +1,45 @@
-import { Camera, Scan } from "lucide-react";
+import { Camera, Scan, Upload, ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface CameraScannerProps {
   onScanComplete?: (result: any) => void;
+  onSuggestionsReady?: (suggestions: Medicine[], classifiedType: 'tablet' | 'capsule') => void;
 }
 
-export const CameraScanner = ({ onScanComplete }: CameraScannerProps) => {
+type WorkflowStep = 'capture' | 'classify';
+
+interface Medicine {
+  id: string;
+  name: string;
+  dosage: string;
+  description: string;
+  side_effects: string[];
+  manufacturer: string;
+  medicine_type: 'tablet' | 'capsule';
+  image_url?: string;
+  shape?: string;
+  color?: string;
+  size?: string;
+}
+
+export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScannerProps) => {
+  const [currentStep, setCurrentStep] = useState<WorkflowStep>('capture');
   const [isScanning, setIsScanning] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
+  const [suggestedMedicines, setSuggestedMedicines] = useState<Medicine[]>([]);
+  const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     return () => {
@@ -26,27 +51,57 @@ export const CameraScanner = ({ onScanComplete }: CameraScannerProps) => {
     };
   }, []);
 
+  // Step 1: Camera and File Upload Functions
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' } 
-      });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        
-        // Wait for metadata to load and explicitly start playback
-        videoRef.current.onloadedmetadata = () => {
-          videoRef.current?.play().catch(err => {
-            console.error("Error playing video:", err);
-          });
+      setError(null);
+      console.log("Requesting camera access...");
+      
+      let constraints: MediaStreamConstraints = { 
+        video: { 
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        } 
+      };
+      
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (envErr) {
+        console.log("Environment camera not available, trying any camera...");
+        constraints = { 
+          video: { 
+            width: { ideal: 1280 }, 
+            height: { ideal: 720 } 
+          } 
         };
-        
-        setHasPermission(true);
-        setIsScanning(true);
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
       }
+      
+      console.log("Camera stream obtained:", stream);
+      setHasPermission(true);
+      setIsScanning(true);
+      
+      setTimeout(() => {
+        if (videoRef.current) {
+          const video = videoRef.current;
+          video.srcObject = stream;
+          video.onloadedmetadata = async () => {
+            try {
+              await video.play();
+              console.log("Video playback started successfully");
+            } catch (err) {
+              console.error("Error playing video:", err);
+              setError("Failed to start video playback. Click to retry.");
+            }
+          };
+        }
+      }, 100);
     } catch (err) {
       console.error("Error accessing camera:", err);
       setHasPermission(false);
+      setError("Camera access denied. Please enable camera permissions.");
       toast.error("Camera access denied. Please enable camera permissions.");
     }
   };
@@ -57,135 +112,299 @@ export const CameraScanner = ({ onScanComplete }: CameraScannerProps) => {
       stream.getTracks().forEach(track => track.stop());
       videoRef.current.srcObject = null;
       setIsScanning(false);
+      setError(null);
+      console.log("Camera stopped and cleaned up");
     }
   };
 
-  const captureAndIdentify = async () => {
+  const captureImage = () => {
     if (!videoRef.current || !canvasRef.current) return;
 
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    ctx.drawImage(video, 0, 0);
+    const imageData = canvas.toDataURL('image/jpeg', 0.8);
+    setCapturedImage(imageData);
+    stopCamera();
+    
+    // Move to classification step
+    setCurrentStep('classify');
+    classifyImage(imageData);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageData = e.target?.result as string;
+      setCapturedImage(imageData);
+      setCurrentStep('classify');
+      classifyImage(imageData);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Step 2: Image Classification (Teachable Machine Integration)
+  const classifyImage = async (imageData: string) => {
     setIsProcessing(true);
     try {
-      // Capture image from video
-      const canvas = canvasRef.current;
-      const video = videoRef.current;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+      // TODO: Replace with actual Teachable Machine model
+      // For now, simulate classification
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      ctx.drawImage(video, 0, 0);
-      const imageData = canvas.toDataURL('image/jpeg', 0.8);
+      // Mock classification result (replace with actual model prediction)
+      const mockClassification: 'tablet' | 'capsule' = Math.random() > 0.5 ? 'tablet' : 'capsule';
+      setClassifiedType(mockClassification);
+      
+      toast.success(`Classified as: ${mockClassification}`);
+      
+      // Load suggestions and pass to parent component
+      const suggestions = await loadMedicineSuggestions(mockClassification);
+      if (onSuggestionsReady && suggestions) {
+        onSuggestionsReady(suggestions, mockClassification);
+      }
+      
+      // Show success message and reset after delay
+      setTimeout(() => {
+        resetWorkflow();
+      }, 1500);
+      
+    } catch (error) {
+      console.error("Classification error:", error);
+      toast.error("Failed to classify image. Please try again.");
+      setCurrentStep('capture');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
-      // Mock AI identification - randomly select a medicine from database
-      const sb = supabase as any;
-      const { data: medicines, error } = await sb
+  // Load Medicine Suggestions
+  const loadMedicineSuggestions = async (type: 'tablet' | 'capsule'): Promise<Medicine[] | null> => {
+    try {
+      const { data: medicines, error } = await supabase
         .from('medicines')
         .select('*');
 
       if (error) throw error;
 
-      if (!medicines || medicines.length === 0) {
-        toast.error("No medicines in database. Please add medicine data first.");
-        return;
-      }
+      // For now, return all medicines since medicine_type column doesn't exist yet
+      // TODO: Filter by type once migration is applied
+      const typedMedicines: Medicine[] = (medicines || []).map(med => ({
+        id: med.id,
+        name: med.name,
+        dosage: med.dosage || '',
+        description: med.description || '',
+        side_effects: Array.isArray(med.side_effects) 
+          ? med.side_effects.map(effect => String(effect))
+          : [],
+        manufacturer: med.manufacturer || '',
+        medicine_type: type, // Use the classified type
+        image_url: undefined, // Will be added after migration
+        shape: undefined,     // Will be added after migration
+        color: undefined,     // Will be added after migration
+        size: undefined       // Will be added after migration
+      }));
 
-      // Simulate AI processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      setSuggestedMedicines(typedMedicines);
+      return typedMedicines;
+    } catch (error) {
+      console.error("Error loading medicine suggestions:", error);
+      toast.error("Failed to load medicine suggestions.");
+      return null;
+    }
+  };
 
-      // Randomly select a medicine (mock identification)
-      const identifiedMedicine = medicines[Math.floor(Math.random() * medicines.length)];
-      const confidence = Math.floor(Math.random() * 20) + 80; // 80-100%
-
-      // Save to scan history
-      const { error: historyError } = await sb
+  // Handle Medicine Selection
+  const selectMedicine = async (medicine: Medicine) => {
+    setSelectedMedicine(medicine);
+    
+    // Save to scan history
+    try {
+      const { error } = await supabase
         .from('scan_history')
         .insert({
-          medicine_id: identifiedMedicine.id,
-          medicine_name: identifiedMedicine.name,
-          confidence: confidence,
-          scanned_image_url: imageData
+          medicine_id: medicine.id,
+          medicine_name: medicine.name,
+          confidence: 95, // High confidence for manual selection
+          scanned_image_url: capturedImage
         });
 
-      if (historyError) throw historyError;
-
-      toast.success(`Medicine identified: ${identifiedMedicine.name} (${confidence}% confidence)`);
+      if (error) throw error;
       
-      // Pass result to parent component
+      toast.success(`Medicine selected: ${medicine.name}`);
+      
       if (onScanComplete) {
-        onScanComplete({
-          ...identifiedMedicine,
-          confidence
-        });
+        onScanComplete(medicine);
       }
-
-      stopCamera();
+      
+      // Reset workflow for next scan
+      setTimeout(() => {
+        resetWorkflow();
+      }, 1500);
     } catch (error) {
-      console.error("Error identifying medicine:", error);
-      toast.error("Failed to identify medicine. Please try again.");
-    } finally {
-      setIsProcessing(false);
+      console.error("Error saving scan history:", error);
+      toast.error("Failed to save scan history.");
+    }
+  };
+
+  const resetWorkflow = () => {
+    setCurrentStep('capture');
+    setCapturedImage(null);
+    setClassifiedType(null);
+    setSuggestedMedicines([]);
+    setSelectedMedicine(null);
+    setError(null);
+    setIsProcessing(false);
+  };
+
+  // Step 1: Capture UI
+  const renderCaptureStep = () => {
+    if (isScanning) {
+      return (
+        <>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            controls={false}
+            className="w-full h-full object-cover"
+            style={{ transform: 'scaleX(-1)' }}
+          />
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute inset-4 border-2 border-primary/50 rounded-lg scan-pulse" />
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <Scan className="h-24 w-24 text-primary/30 scan-pulse" />
+            </div>
+          </div>
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            <Button onClick={stopCamera} variant="secondary" className="glass-button">
+              Stop Camera
+            </Button>
+            <Button onClick={captureImage} className="medical-gradient text-white">
+              <Scan className="mr-2 h-4 w-4" />
+              Capture Image
+            </Button>
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8">
+        <div className="rounded-full bg-primary/10 p-6 backdrop-blur-sm">
+          <Camera className="h-16 w-16 text-primary" />
+        </div>
+        <div className="text-center space-y-2">
+          <h3 className="text-xl font-semibold">Ready to Scan</h3>
+          <p className="text-sm text-muted-foreground max-w-md">
+            Take a photo or upload an image of your medicine for identification
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <Button 
+            onClick={startCamera}
+            size="lg"
+            className="medical-gradient text-white shadow-lg hover:shadow-xl transition-all"
+          >
+            <Camera className="mr-2 h-5 w-5" />
+            Start Camera
+          </Button>
+          <Button 
+            onClick={() => fileInputRef.current?.click()}
+            size="lg"
+            variant="outline"
+            className="shadow-lg hover:shadow-xl transition-all"
+          >
+            <Upload className="mr-2 h-5 w-5" />
+            Upload Photo
+          </Button>
+        </div>
+        {hasPermission === false && (
+          <p className="text-sm text-destructive">
+            Camera access denied. Please enable camera permissions.
+          </p>
+        )}
+        {error && (
+          <p className="text-sm text-destructive max-w-md text-center">
+            {error}
+          </p>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+      </div>
+    );
+  };
+
+  // Step 2: Classification UI
+  const renderClassifyStep = () => (
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-blue-950/30 dark:to-emerald-950/30">
+      {/* Back Button */}
+      <div className="absolute top-4 left-4">
+        <Button 
+          onClick={resetWorkflow} 
+          variant="secondary"
+          size="sm"
+          className="glass-button"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Back
+        </Button>
+      </div>
+
+      {/* Centered Classification Content */}
+      <div className="flex flex-col items-center justify-center h-full gap-6 p-8">
+        {capturedImage && (
+          <div className="glass-card p-3 rounded-xl">
+            <img 
+              src={capturedImage} 
+              alt="Captured medicine" 
+              className="w-32 h-32 object-cover rounded-lg shadow-lg" 
+            />
+          </div>
+        )}
+        
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary/20 border-t-primary mx-auto"></div>
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold">Analyzing Image...</h3>
+            <p className="text-sm text-muted-foreground max-w-md">
+              Our AI is classifying your medicine as tablet or capsule
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Render different UI based on current workflow step
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 'capture':
+        return renderCaptureStep();
+      case 'classify':
+        return renderClassifyStep();
+      default:
+        return renderCaptureStep();
     }
   };
 
   return (
     <Card className="glass-card overflow-hidden border-2">
       <div className="relative aspect-video bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-blue-950/30 dark:to-emerald-950/30">
-        {!isScanning ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8">
-            <div className="rounded-full bg-primary/10 p-6 backdrop-blur-sm">
-              <Camera className="h-16 w-16 text-primary" />
-            </div>
-            <div className="text-center space-y-2">
-              <h3 className="text-xl font-semibold">Ready to Scan</h3>
-              <p className="text-sm text-muted-foreground max-w-md">
-                Position a tablet or capsule in front of your camera for instant identification
-              </p>
-            </div>
-            <Button 
-              onClick={startCamera}
-              size="lg"
-              className="medical-gradient text-white shadow-lg hover:shadow-xl transition-all"
-            >
-              <Camera className="mr-2 h-5 w-5" />
-              Start Camera
-            </Button>
-            {hasPermission === false && (
-              <p className="text-sm text-destructive">
-                Camera access denied. Please enable camera permissions.
-              </p>
-            )}
-          </div>
-        ) : (
-          <>
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-4 border-2 border-primary/50 rounded-lg scan-pulse" />
-              <Scan className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-24 w-24 text-primary/30 scan-pulse" />
-            </div>
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-              <Button
-                onClick={stopCamera}
-                variant="secondary"
-                className="glass-button"
-              >
-                Stop Camera
-              </Button>
-              <Button
-                onClick={captureAndIdentify}
-                disabled={isProcessing}
-                className="medical-gradient text-white"
-              >
-                <Scan className="mr-2 h-4 w-4" />
-                {isProcessing ? "Identifying..." : "Capture & Identify"}
-              </Button>
-            </div>
-          </>
-        )}
+        {renderStepContent()}
       </div>
       {/* Hidden canvas for image capture */}
       <canvas ref={canvasRef} className="hidden" />

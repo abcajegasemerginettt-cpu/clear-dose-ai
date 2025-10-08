@@ -3,18 +3,27 @@ import { Badge } from "@/components/ui/badge";
 import { Pill, AlertCircle, Info, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface MedicineInfoProps {
-  medicine?: {
-    name: string;
-    dosage: string;
-    description: string;
-    side_effects: string[];
-    manufacturer?: string;
-    confidence: number;
-  };
+interface Medicine {
+  id: string;
+  name: string;
+  dosage: string;
+  description: string;
+  side_effects: string[];
+  manufacturer: string;
+  medicine_type: 'tablet' | 'capsule';
+  image_url?: string;
+  shape?: string;
+  color?: string;
+  size?: string;
+  confidence?: number;
 }
 
-export const MedicineInfo = ({ medicine }: MedicineInfoProps) => {
+interface MedicineInfoProps {
+  medicine?: Medicine | null;
+  classifiedType?: 'tablet' | 'capsule' | null;
+}
+
+export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) => {
   if (!medicine) {
     return (
       <Card className="glass-card p-8">
@@ -44,14 +53,25 @@ export const MedicineInfo = ({ medicine }: MedicineInfoProps) => {
             <div>
               <h3 className="text-2xl font-bold">{medicine.name}</h3>
               <p className="text-sm text-muted-foreground">{medicine.dosage}</p>
+              {classifiedType && (
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="w-2 h-2 medical-gradient rounded-full"></div>
+                  <Badge className="medical-gradient text-white text-sm px-2 py-1 font-bold uppercase tracking-wide">
+                    {classifiedType}
+                  </Badge>
+                  <div className="w-2 h-2 medical-gradient rounded-full"></div>
+                </div>
+              )}
             </div>
           </div>
-          <Badge 
-            variant="secondary" 
-            className="bg-primary/10 text-primary border-primary/20"
-          >
-            {medicine.confidence}% Confidence
-          </Badge>
+          {medicine.confidence && (
+            <Badge 
+              variant="secondary" 
+              className="bg-primary/10 text-primary border-primary/20"
+            >
+              {medicine.confidence}% Confidence
+            </Badge>
+          )}
         </div>
         <Button variant="outline" size="sm" className="gap-2">
           <Download className="h-4 w-4" />
@@ -69,6 +89,18 @@ export const MedicineInfo = ({ medicine }: MedicineInfoProps) => {
             {medicine.description}
           </p>
         </div>
+
+        {medicine.manufacturer && (
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Info className="h-4 w-4 text-primary" />
+              <h4 className="font-semibold">Manufacturer</h4>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {medicine.manufacturer}
+            </p>
+          </div>
+        )}
 
         <div>
           <div className="flex items-center gap-2 mb-3">

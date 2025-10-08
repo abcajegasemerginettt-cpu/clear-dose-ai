@@ -1,23 +1,49 @@
 import { Camera, Zap, Shield, Smartphone } from "lucide-react";
 import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
+import { MedicineSuggestions } from "@/components/MedicineSuggestions";
 import { ScanHistory } from "@/components/ScanHistory";
 import { useState } from "react";
 
 interface Medicine {
+  id: string;
   name: string;
   dosage: string;
   description: string;
   side_effects: string[];
-  manufacturer?: string;
-  confidence: number;
+  manufacturer: string;
+  medicine_type: 'tablet' | 'capsule';
+  image_url?: string;
+  shape?: string;
+  color?: string;
+  size?: string;
+  confidence?: number;
 }
 
 const Index = () => {
   const [scannedMedicine, setScannedMedicine] = useState<Medicine | null>(null);
+  const [medicineSuggestions, setMedicineSuggestions] = useState<Medicine[]>([]);
+  const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
 
   const handleScanComplete = (medicine: Medicine) => {
     setScannedMedicine(medicine);
+    // Clear suggestions when a medicine is directly selected
+    setMedicineSuggestions([]);
+    setClassifiedType(null);
+  };
+
+  const handleSuggestionsReady = (suggestions: Medicine[], type: 'tablet' | 'capsule') => {
+    setMedicineSuggestions(suggestions);
+    setClassifiedType(type);
+    // Clear any previously selected medicine
+    setScannedMedicine(null);
+  };
+
+  const handleMedicineSelection = (medicine: Medicine) => {
+    setScannedMedicine(medicine);
+    // Clear suggestions after selection but keep classifiedType for display
+    setMedicineSuggestions([]);
+    // Keep classifiedType so it shows in MedicineInfo
   };
 
   return (
@@ -76,12 +102,27 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Camera Scanner */}
           <div className="space-y-6">
-            <CameraScanner onScanComplete={handleScanComplete} />
+            <CameraScanner 
+              onScanComplete={handleScanComplete}
+              onSuggestionsReady={handleSuggestionsReady}
+            />
           </div>
           
           {/* Medicine Info */}
           <div className="space-y-6">
-            <MedicineInfo medicine={scannedMedicine} />
+            {/* Show suggestions if available, otherwise show selected medicine info */}
+            {medicineSuggestions.length > 0 && classifiedType ? (
+              <MedicineSuggestions 
+                suggestions={medicineSuggestions}
+                classifiedType={classifiedType}
+                onSelectMedicine={handleMedicineSelection}
+              />
+            ) : (
+              <MedicineInfo 
+                medicine={scannedMedicine} 
+                classifiedType={classifiedType}
+              />
+            )}
           </div>
         </div>
         
