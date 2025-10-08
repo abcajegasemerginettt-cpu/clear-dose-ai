@@ -8,7 +8,8 @@ interface MedicineInfoProps {
     name: string;
     dosage: string;
     description: string;
-    sideEffects: string[];
+    side_effects: string[];
+    manufacturer?: string;
     confidence: number;
   };
 }
@@ -75,7 +76,7 @@ export const MedicineInfo = ({ medicine }: MedicineInfoProps) => {
             <h4 className="font-semibold">Side Effects</h4>
           </div>
           <ul className="space-y-2">
-            {medicine.sideEffects.map((effect, index) => (
+            {medicine.side_effects.map((effect, index) => (
               <li 
                 key={index}
                 className="text-sm text-muted-foreground flex items-start gap-2"

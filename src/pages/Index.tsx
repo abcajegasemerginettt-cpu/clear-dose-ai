@@ -1,100 +1,113 @@
+import { Camera, Zap, Shield, Smartphone } from "lucide-react";
 import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
 import { ScanHistory } from "@/components/ScanHistory";
-import { Brain, ShieldCheck, Zap } from "lucide-react";
-import heroImage from "@/assets/hero-medical.jpg";
+import { useState } from "react";
+
+interface Medicine {
+  name: string;
+  dosage: string;
+  description: string;
+  side_effects: string[];
+  manufacturer?: string;
+  confidence: number;
+}
 
 const Index = () => {
-  // Mock medicine data - will be replaced with real AI predictions
-  const mockMedicine = {
-    name: "Aspirin",
-    dosage: "500mg",
-    description: "Aspirin is a common pain reliever and anti-inflammatory medication. It works by blocking certain natural substances in your body to reduce pain and swelling.",
-    sideEffects: [
-      "Upset stomach or heartburn",
-      "Drowsiness or dizziness",
-      "Mild headache",
-      "Nausea or vomiting"
-    ],
-    confidence: 95
+  const [scannedMedicine, setScannedMedicine] = useState<Medicine | null>(null);
+
+  const handleScanComplete = (medicine: Medicine) => {
+    setScannedMedicine(medicine);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/80">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 backdrop-blur-3xl" />
-        <div 
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: `url(${heroImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <div className="relative container mx-auto px-4 py-20">
-          <div className="max-w-4xl mx-auto text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm font-medium mb-4">
-              <Brain className="h-4 w-4 text-primary" />
-              AI-Powered Medicine Recognition
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-medical-accent/5" />
+        <div className="relative container mx-auto px-4 py-16">
+          <div className="text-center space-y-6 mb-16">
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-medical-red-light to-medical-accent bg-clip-text text-transparent">
               MedLens AI
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Instantly identify tablets and capsules using advanced AI technology. 
-              Get comprehensive medicine information in seconds.
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
+              Instantly identify medicines using advanced AI technology. 
+              Scan tablets and capsules for detailed information and safety guidance.
             </p>
             
-            {/* Feature Cards */}
-            <div className="grid md:grid-cols-3 gap-4 mt-12">
-              {[
-                {
-                  icon: Brain,
-                  title: "AI Recognition",
-                  description: "TensorFlow-powered identification"
-                },
-                {
-                  icon: Zap,
-                  title: "Instant Results",
-                  description: "Real-time scanning & analysis"
-                },
-                {
-                  icon: ShieldCheck,
-                  title: "Verified Data",
-                  description: "Accurate medicine information"
-                }
-              ].map((feature, index) => (
-                <div key={index} className="glass-card p-6 text-center space-y-2">
-                  <div className="mx-auto w-12 h-12 rounded-lg medical-gradient flex items-center justify-center">
-                    <feature.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
+            {/* Feature highlights */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-4xl mx-auto">
+              <div className="flex flex-col items-center gap-4 p-6 rounded-2xl glass-card">
+                <div className="rounded-full bg-primary/10 p-4">
+                  <Camera className="h-8 w-8 text-primary" />
                 </div>
-              ))}
+                <div className="text-center">
+                  <h3 className="font-semibold text-lg">AI-Powered Scanning</h3>
+                  <p className="text-sm text-muted-foreground">Advanced computer vision for accurate medicine identification</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col items-center gap-4 p-6 rounded-2xl glass-card">
+                <div className="rounded-full bg-medical-accent/10 p-4">
+                  <Zap className="h-8 w-8" style={{ color: 'hsl(var(--medical-accent))' }} />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-semibold text-lg">Instant Results</h3>
+                  <p className="text-sm text-muted-foreground">Get medicine details and safety information in seconds</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col items-center gap-4 p-6 rounded-2xl glass-card">
+                <div className="rounded-full bg-destructive/10 p-4">
+                  <Shield className="h-8 w-8 text-destructive" />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-semibold text-lg">Safety First</h3>
+                  <p className="text-sm text-muted-foreground">Complete side effects and dosage information</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Main Scanner Section */}
-      <section className="container mx-auto px-4 py-12">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <CameraScanner />
+      {/* Scanner Section */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {/* Camera Scanner */}
+          <div className="space-y-6">
+            <CameraScanner onScanComplete={handleScanComplete} />
+          </div>
           
-          <div className="grid md:grid-cols-2 gap-8">
-            <MedicineInfo medicine={mockMedicine} />
-            <ScanHistory />
+          {/* Medicine Info */}
+          <div className="space-y-6">
+            <MedicineInfo medicine={scannedMedicine} />
           </div>
         </div>
-      </section>
+        
+        {/* Scan History */}
+        <div className="mt-12 max-w-4xl mx-auto">
+          <ScanHistory />
+        </div>
+      </div>
 
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 mt-20 border-t">
-        <div className="text-center text-sm text-muted-foreground">
-          <p>MedLens AI - Powered by TensorFlow & Lovable Cloud</p>
-          <p className="mt-2">⚕️ Always consult healthcare professionals for medical advice</p>
+      <footer className="bg-card/50 backdrop-blur-sm border-t border-border mt-16">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center space-y-4">
+            <div className="flex items-center justify-center gap-2">
+              <Smartphone className="h-5 w-5 text-primary" />
+              <span className="font-semibold">MedLens AI</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © 2024 MedLens AI. All rights reserved.
+            </p>
+            <p className="text-xs text-muted-foreground max-w-2xl mx-auto">
+              <strong>Disclaimer:</strong> This app is for informational purposes only. 
+              Always consult healthcare professionals for medical advice. Do not rely solely on 
+              AI identification for medication decisions.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
