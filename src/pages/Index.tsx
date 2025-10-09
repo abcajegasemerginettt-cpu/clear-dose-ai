@@ -3,6 +3,7 @@ import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
 import { MedicineSuggestions } from "@/components/MedicineSuggestions";
 import { ScanHistory } from "@/components/ScanHistory";
+import { ShaderBackground } from "@/components/ShaderBackground";
 import { useState } from "react";
 
 interface Medicine {
@@ -47,7 +48,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/80">
+    <div className="min-h-screen relative">
+      <ShaderBackground />
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-medical-accent/5" />
