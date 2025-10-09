@@ -4,17 +4,15 @@ import { Pill, AlertCircle, Info, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Medicine {
-  id: string;
+  id: number;
   name: string;
-  dosage: string;
+  generic_name: string;
   description: string;
-  side_effects: string[];
-  manufacturer: string;
   medicine_type: 'tablet' | 'capsule';
-  image_url?: string;
-  shape?: string;
-  color?: string;
-  size?: string;
+  variants: string[];
+  side_effects: string[];
+  storage: string;
+  category: string;
   confidence?: number;
 }
 
@@ -52,16 +50,15 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             </div>
             <div>
               <h3 className="text-2xl font-bold">{medicine.name}</h3>
-              <p className="text-sm text-muted-foreground">{medicine.dosage}</p>
-              {classifiedType && (
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="w-2 h-2 medical-gradient rounded-full"></div>
-                  <Badge className="medical-gradient text-white text-sm px-2 py-1 font-bold uppercase tracking-wide">
-                    {classifiedType}
-                  </Badge>
-                  <div className="w-2 h-2 medical-gradient rounded-full"></div>
-                </div>
-              )}
+              <p className="text-sm text-muted-foreground">{medicine.generic_name}</p>
+              <div className="flex items-center gap-2 mt-2">
+                <Badge className="bg-primary/10 text-primary border-primary/20">
+                  {medicine.medicine_type.toUpperCase()}
+                </Badge>
+                <Badge variant="outline">
+                  {medicine.category}
+                </Badge>
+              </div>
             </div>
           </div>
           {medicine.confidence && (
@@ -90,17 +87,30 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
           </p>
         </div>
 
-        {medicine.manufacturer && (
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Info className="h-4 w-4 text-primary" />
-              <h4 className="font-semibold">Manufacturer</h4>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {medicine.manufacturer}
-            </p>
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <Info className="h-4 w-4 text-primary" />
+            <h4 className="font-semibold">Variants</h4>
           </div>
-        )}
+          <ul className="text-sm text-muted-foreground space-y-1">
+            {medicine.variants.map((variant, index) => (
+              <li key={index} className="flex items-start gap-2">
+                <span className="text-primary mt-1">•</span>
+                <span>{variant}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <Info className="h-4 w-4 text-primary" />
+            <h4 className="font-semibold">Storage</h4>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {medicine.storage}
+          </p>
+        </div>
 
         <div>
           <div className="flex items-center gap-2 mb-3">

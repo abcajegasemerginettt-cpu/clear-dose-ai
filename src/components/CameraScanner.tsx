@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { loadModel, predict, getTopPrediction } from '@/utils/teachableMachine';
+import medicinesData from '@/data/medicines.json';
 
 interface CameraScannerProps {
   onScanComplete?: (result: any) => void;
@@ -14,17 +16,16 @@ interface CameraScannerProps {
 type WorkflowStep = 'capture' | 'classify';
 
 interface Medicine {
-  id: string;
+  id: number;
   name: string;
-  dosage: string;
+  generic_name: string;
   description: string;
-  side_effects: string[];
-  manufacturer: string;
   medicine_type: 'tablet' | 'capsule';
-  image_url?: string;
-  shape?: string;
-  color?: string;
-  size?: string;
+  variants: string[];
+  side_effects: string[];
+  storage: string;
+  category: string;
+  confidence?: number;
 }
 
 export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScannerProps) => {
@@ -42,6 +43,18 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Load the Teachable Machine model when the component mounts
+    console.log("Loading Teachable Machine model...");
+    loadModel()
+      .then(() => {
+        console.log("Model loaded successfully!");
+        toast.success("AI model loaded successfully!");
+      })
+      .catch(err => {
+        console.error("Model loading error:", err);
+        toast.error("Failed to load the AI model. Please refresh the page.");
+      });
+
     return () => {
       // Cleanup: stop camera when component unmounts
       if (videoRef.current && videoRef.current.srcObject) {
@@ -155,22 +168,58 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
   const classifyImage = async (imageData: string) => {
     setIsProcessing(true);
     try {
-      // TODO: Replace with actual Teachable Machine model
-      // For now, simulate classification
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log("Starting image classification...");
       
-      // Mock classification result (replace with actual model prediction)
-      const mockClassification: 'tablet' | 'capsule' = Math.random() > 0.5 ? 'tablet' : 'capsule';
-      setClassifiedType(mockClassification);
+      // Create image element from the captured/uploaded image
+      const imageElement = new Image();
+      imageElement.crossOrigin = "anonymous"; // Add this for CORS
+      imageElement.src = imageData;
       
-      toast.success(`Classified as: ${mockClassification}`);
+      await new Promise((resolve, reject) => { 
+        imageElement.onload = resolve;
+        imageElement.onerror = reject;
+      });
+
+      console.log("Image loaded, dimensions:", imageElement.width, "x", imageElement.height);
+
+      // Use Teachable Machine model to predict
+      console.log("Making prediction...");
+      const predictions = await predict(imageElement);
+      console.log("All predictions:", predictions);
       
-      // Load suggestions and pass to parent component
-      const suggestions = await loadMedicineSuggestions(mockClassification);
-      if (onSuggestionsReady && suggestions) {
-        onSuggestionsReady(suggestions, mockClassification);
+      const topPrediction = getTopPrediction(predictions);
+      console.log("Top prediction:", topPrediction);
+      
+      const confidence = Math.round(topPrediction.probability * 100);
+      const medicineName = topPrediction.className;
+
+      console.log(`Final result: ${medicineName} with ${confidence}% confidence`);
+
+      // Find the medicine in our database
+      const foundMedicine = medicinesData.find(
+        med => med.name.toLowerCase() === medicineName.toLowerCase()
+      );
+
+      if (!foundMedicine) {
+        console.error(`Medicine "${medicineName}" not found in database`);
+        console.log("Available medicines:", medicinesData.map(m => m.name));
+        throw new Error(`Medicine "${medicineName}" not found in database.`);
       }
-      
+
+      // Show classification result
+      toast.success(`Detected: ${medicineName} (${confidence}% confident)`);
+
+      // Prepare the result with confidence from the model
+      const result = {
+        ...foundMedicine,
+        confidence: confidence
+      };
+
+      // Call onScanComplete with the detected medicine
+      if (onScanComplete) {
+        onScanComplete(result);
+      }
+
       // Show success message and reset after delay
       setTimeout(() => {
         resetWorkflow();
@@ -185,7 +234,8 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
     }
   };
 
-  // Load Medicine Suggestions
+  /*
+  // Load Medicine Suggestions - Commented out since we're using direct detection now
   const loadMedicineSuggestions = async (type: 'tablet' | 'capsule'): Promise<Medicine[] | null> => {
     try {
       const { data: medicines, error } = await supabase
@@ -221,7 +271,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
     }
   };
 
-  // Handle Medicine Selection
+  // Handle Medicine Selection - Commented out since we're using direct detection now
   const selectMedicine = async (medicine: Medicine) => {
     setSelectedMedicine(medicine);
     
@@ -230,7 +280,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
       const { error } = await supabase
         .from('scan_history')
         .insert({
-          medicine_id: medicine.id,
+          medicine_id: medicine.id.toString(),
           medicine_name: medicine.name,
           confidence: 95, // High confidence for manual selection
           scanned_image_url: capturedImage
@@ -253,6 +303,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
       toast.error("Failed to save scan history.");
     }
   };
+  */
 
   const resetWorkflow = () => {
     setCurrentStep('capture');

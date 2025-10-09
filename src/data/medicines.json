@@ -1,0 +1,805 @@
+[
+  {
+    "id": 1,
+    "name": "Bioflu",
+    "generic_name": "Phenylephrine HCl + Chlorphenamine Maleate + Paracetamol",
+    "description": "Multi-symptom relief for flu, fever, body aches, and nasal congestion.",
+    "medicine_type": "tablet",
+    "variants": ["Bioflu Tablet"],
+    "side_effects": [
+      "Drowsiness",
+      "Dizziness",
+      "Dry mouth",
+      "Nausea",
+      "Stomach upset"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Cold and flu relief"
+  },
+  {
+    "id": 2,
+    "name": "Neozep",
+    "generic_name": "Phenylephrine HCl + Chlorphenamine Maleate + Paracetamol",
+    "description": "Relief from symptoms of common cold, sinusitis, flu, and other minor respiratory tract infections.",
+    "medicine_type": "tablet",
+    "variants": ["Neozep Tablet", "Neozep Forte"],
+    "side_effects": [
+      "Drowsiness",
+      "Blurred vision",
+      "Dry mouth",
+      "Nausea",
+      "Dizziness"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Cold and flu relief"
+  },
+  {
+    "id": 3,
+    "name": "Biogesic",
+    "generic_name": "Paracetamol",
+    "description": "Used to relieve mild to moderate pain and reduce fever.",
+    "medicine_type": "tablet",
+    "variants": ["Biogesic Tablet 500mg", "Biogesic Forte 650mg", "Biogesic Syrup for Kids"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Allergic reaction (rare)"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Pain reliever"
+  },
+  {
+    "id": 4,
+    "name": "Medicol Advance",
+    "generic_name": "Ibuprofen",
+    "description": "Anti-inflammatory pain reliever for headaches, muscle pain, and fever.",
+    "medicine_type": "capsule",
+    "variants": ["Medicol Advance 200mg", "Medicol Advance 400mg"],
+    "side_effects": [
+      "Stomach irritation",
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Pain reliever"
+  },
+  {
+    "id": 5,
+    "name": "Rexidol Forte",
+    "generic_name": "Paracetamol + Tramadol HCl",
+    "description": "For moderate to severe pain relief.",
+    "medicine_type": "tablet",
+    "variants": ["Rexidol Forte Tablet"],
+    "side_effects": [
+      "Drowsiness",
+      "Nausea",
+      "Constipation",
+      "Dizziness"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Pain reliever"
+  },
+  {
+    "id": 6,
+    "name": "Diatabs",
+    "generic_name": "Loperamide HCl",
+    "description": "Anti-diarrheal medication for acute and chronic diarrhea.",
+    "medicine_type": "tablet",
+    "variants": ["Diatabs 2mg"],
+    "side_effects": [
+      "Constipation",
+      "Dizziness",
+      "Drowsiness",
+      "Nausea"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-diarrheal"
+  },
+  {
+    "id": 7,
+    "name": "Advil",
+    "generic_name": "Ibuprofen",
+    "description": "Fast-acting pain reliever and fever reducer.",
+    "medicine_type": "capsule",
+    "variants": ["Advil 200mg", "Advil Liqui-Gels"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Pain reliever"
+  },
+  {
+    "id": 8,
+    "name": "Alaxan FR",
+    "generic_name": "Ibuprofen + Paracetamol",
+    "description": "Fast relief from headache, toothache, and muscle pain.",
+    "medicine_type": "capsule",
+    "variants": ["Alaxan FR Capsule"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Dizziness",
+      "Allergic reaction"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Pain reliever"
+  },
+  {
+    "id": 9,
+    "name": "Solmux",
+    "generic_name": "Carbocisteine",
+    "description": "Mucolytic agent that helps clear mucus from respiratory tract.",
+    "medicine_type": "capsule",
+    "variants": ["Solmux 500mg", "Solmux Advance"],
+    "side_effects": [
+      "Nausea",
+      "Vomiting",
+      "Diarrhea",
+      "Stomach upset"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Mucolytic"
+  },
+  {
+    "id": 10,
+    "name": "Skelan",
+    "generic_name": "Methocarbamol",
+    "description": "Muscle relaxant for muscle spasms and pain.",
+    "medicine_type": "tablet",
+    "variants": ["Skelan 500mg"],
+    "side_effects": [
+      "Drowsiness",
+      "Dizziness",
+      "Nausea",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Muscle relaxant"
+  },
+  {
+    "id": 11,
+    "name": "Kremil-S",
+    "generic_name": "Aluminum Hydroxide + Magnesium Hydroxide + Simethicone",
+    "description": "Antacid for hyperacidity, heartburn, and gas pains.",
+    "medicine_type": "tablet",
+    "variants": ["Kremil-S Tablet", "Kremil-S Advance"],
+    "side_effects": [
+      "Constipation",
+      "Diarrhea",
+      "Stomach cramps"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antacid"
+  },
+  {
+    "id": 12,
+    "name": "Bonamine",
+    "generic_name": "Meclizine HCl",
+    "description": "Prevention and treatment of motion sickness and vertigo.",
+    "medicine_type": "tablet",
+    "variants": ["Bonamine 25mg"],
+    "side_effects": [
+      "Drowsiness",
+      "Dry mouth",
+      "Blurred vision",
+      "Fatigue"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-motion sickness"
+  },
+  {
+    "id": 13,
+    "name": "Motilium",
+    "generic_name": "Domperidone",
+    "description": "Treatment of nausea, vomiting, and digestive disorders.",
+    "medicine_type": "tablet",
+    "variants": ["Motilium 10mg"],
+    "side_effects": [
+      "Headache",
+      "Dry mouth",
+      "Stomach cramps",
+      "Diarrhea"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-nausea"
+  },
+  {
+    "id": 14,
+    "name": "Mucosolvan",
+    "generic_name": "Ambroxol HCl",
+    "description": "Mucolytic for productive cough and respiratory tract disorders.",
+    "medicine_type": "tablet",
+    "variants": ["Mucosolvan 30mg", "Mucosolvan Syrup"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Diarrhea",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Mucolytic"
+  },
+  {
+    "id": 15,
+    "name": "Imodium",
+    "generic_name": "Loperamide HCl",
+    "description": "Anti-diarrheal for acute and chronic diarrhea.",
+    "medicine_type": "capsule",
+    "variants": ["Imodium 2mg"],
+    "side_effects": [
+      "Constipation",
+      "Dizziness",
+      "Drowsiness",
+      "Nausea"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-diarrheal"
+  },
+  {
+    "id": 16,
+    "name": "Alnix",
+    "generic_name": "Cetirizine HCl",
+    "description": "Antihistamine for allergic rhinitis and urticaria.",
+    "medicine_type": "tablet",
+    "variants": ["Alnix 10mg"],
+    "side_effects": [
+      "Drowsiness",
+      "Fatigue",
+      "Dry mouth",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antihistamine"
+  },
+  {
+    "id": 17,
+    "name": "Ascorbic Acid",
+    "generic_name": "Vitamin C",
+    "description": "Vitamin C supplement for immune system support.",
+    "medicine_type": "tablet",
+    "variants": ["Ascorbic Acid 500mg", "Ascorbic Acid 1000mg"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Diarrhea (high doses)"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 18,
+    "name": "Poten-Cee",
+    "generic_name": "Vitamin C + Zinc",
+    "description": "Vitamin C with Zinc for immune system support.",
+    "medicine_type": "tablet",
+    "variants": ["Poten-Cee 500mg", "Poten-Cee Forte"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Metallic taste"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 19,
+    "name": "Stresstabs",
+    "generic_name": "B-Complex + Vitamin C + Vitamin E",
+    "description": "Multivitamin for stress and fatigue management.",
+    "medicine_type": "tablet",
+    "variants": ["Stresstabs", "Stresstabs with Iron"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Urine discoloration"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Multivitamin"
+  },
+  {
+    "id": 20,
+    "name": "Forti-D",
+    "generic_name": "Vitamin D3",
+    "description": "Vitamin D supplement for bone health.",
+    "medicine_type": "tablet",
+    "variants": ["Forti-D 800IU", "Forti-D 1000IU"],
+    "side_effects": [
+      "Nausea",
+      "Constipation",
+      "Weakness"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 21,
+    "name": "Cardiclear",
+    "generic_name": "Amlodipine",
+    "description": "Calcium channel blocker for hypertension and angina.",
+    "medicine_type": "tablet",
+    "variants": ["Cardiclear 5mg", "Cardiclear 10mg"],
+    "side_effects": [
+      "Dizziness",
+      "Swelling of ankles",
+      "Fatigue",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antihypertensive"
+  },
+  {
+    "id": 22,
+    "name": "Hemarate FA",
+    "generic_name": "Iron + Folic Acid",
+    "description": "Iron supplement for anemia prevention and treatment.",
+    "medicine_type": "capsule",
+    "variants": ["Hemarate FA"],
+    "side_effects": [
+      "Stomach upset",
+      "Constipation",
+      "Dark stools",
+      "Nausea"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Iron supplement"
+  },
+  {
+    "id": 23,
+    "name": "Cetirizine",
+    "generic_name": "Cetirizine HCl",
+    "description": "Antihistamine for allergic reactions and hay fever.",
+    "medicine_type": "tablet",
+    "variants": ["Cetirizine 10mg"],
+    "side_effects": [
+      "Drowsiness",
+      "Fatigue",
+      "Dry mouth",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antihistamine"
+  },
+  {
+    "id": 24,
+    "name": "Pharex B-Complex",
+    "generic_name": "B-Complex Vitamins",
+    "description": "B-vitamin supplement for energy and nervous system support.",
+    "medicine_type": "tablet",
+    "variants": ["Pharex B-Complex"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Urine discoloration"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 25,
+    "name": "Flamic",
+    "generic_name": "Diclofenac Potassium",
+    "description": "Anti-inflammatory for pain and inflammation relief.",
+    "medicine_type": "tablet",
+    "variants": ["Flamic 50mg"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-inflammatory"
+  },
+  {
+    "id": 26,
+    "name": "Amoxicillin",
+    "generic_name": "Amoxicillin",
+    "description": "Antibiotic for bacterial infections.",
+    "medicine_type": "capsule",
+    "variants": ["Amoxicillin 250mg", "Amoxicillin 500mg"],
+    "side_effects": [
+      "Nausea",
+      "Diarrhea",
+      "Stomach upset",
+      "Allergic reaction"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antibiotic"
+  },
+  {
+    "id": 27,
+    "name": "Flanax",
+    "generic_name": "Naproxen Sodium",
+    "description": "Anti-inflammatory pain reliever for arthritis and muscle pain.",
+    "medicine_type": "tablet",
+    "variants": ["Flanax 220mg", "Flanax 275mg"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-inflammatory"
+  },
+  {
+    "id": 28,
+    "name": "Saridon Triple Action",
+    "generic_name": "Paracetamol + Propyphenazone + Caffeine",
+    "description": "Triple action pain relief for headaches and body pain.",
+    "medicine_type": "tablet",
+    "variants": ["Saridon Triple Action"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Restlessness",
+      "Insomnia"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Pain reliever"
+  },
+  {
+    "id": 29,
+    "name": "Albendazole",
+    "generic_name": "Albendazole",
+    "description": "Antiparasitic medication for worm infections.",
+    "medicine_type": "tablet",
+    "variants": ["Albendazole 400mg"],
+    "side_effects": [
+      "Nausea",
+      "Stomach pain",
+      "Headache",
+      "Dizziness"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antiparasitic"
+  },
+  {
+    "id": 30,
+    "name": "Decolgen Forte",
+    "generic_name": "Phenylephrine HCl + Chlorphenamine Maleate + Paracetamol",
+    "description": "Relief from cold, flu, and respiratory symptoms.",
+    "medicine_type": "tablet",
+    "variants": ["Decolgen Forte"],
+    "side_effects": [
+      "Drowsiness",
+      "Dizziness",
+      "Dry mouth",
+      "Nausea"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Cold and flu relief"
+  },
+  {
+    "id": 31,
+    "name": "Metformin",
+    "generic_name": "Metformin HCl",
+    "description": "Antidiabetic medication for type 2 diabetes management.",
+    "medicine_type": "tablet",
+    "variants": ["Metformin 500mg", "Metformin 850mg"],
+    "side_effects": [
+      "Nausea",
+      "Diarrhea",
+      "Stomach upset",
+      "Metallic taste"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antidiabetic"
+  },
+  {
+    "id": 32,
+    "name": "Carbocisteine",
+    "generic_name": "Carbocisteine",
+    "description": "Mucolytic for respiratory tract disorders with thick mucus.",
+    "medicine_type": "capsule",
+    "variants": ["Carbocisteine 500mg"],
+    "side_effects": [
+      "Nausea",
+      "Vomiting",
+      "Diarrhea",
+      "Stomach upset"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Mucolytic"
+  },
+  {
+    "id": 33,
+    "name": "Ponstan SF",
+    "generic_name": "Mefenamic Acid",
+    "description": "Anti-inflammatory for pain relief and menstrual cramps.",
+    "medicine_type": "capsule",
+    "variants": ["Ponstan SF 250mg"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-inflammatory"
+  },
+  {
+    "id": 34,
+    "name": "Unomet",
+    "generic_name": "Metformin HCl",
+    "description": "Extended-release metformin for diabetes management.",
+    "medicine_type": "tablet",
+    "variants": ["Unomet 500mg", "Unomet 750mg"],
+    "side_effects": [
+      "Nausea",
+      "Diarrhea",
+      "Stomach upset",
+      "Metallic taste"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antidiabetic"
+  },
+  {
+    "id": 35,
+    "name": "Fortis Vitamin B Complex",
+    "generic_name": "B-Complex Vitamins",
+    "description": "B-vitamin supplement for energy and metabolism support.",
+    "medicine_type": "tablet",
+    "variants": ["Fortis Vitamin B Complex"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Urine discoloration"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 36,
+    "name": "Diclofenac",
+    "generic_name": "Diclofenac Sodium",
+    "description": "Anti-inflammatory for pain and inflammation relief.",
+    "medicine_type": "tablet",
+    "variants": ["Diclofenac 50mg", "Diclofenac 75mg"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-inflammatory"
+  },
+  {
+    "id": 37,
+    "name": "Neurogen E",
+    "generic_name": "Vitamin E + B-Complex",
+    "description": "Vitamin supplement for nerve health and antioxidant support.",
+    "medicine_type": "capsule",
+    "variants": ["Neurogen E"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 38,
+    "name": "Ambiretic",
+    "generic_name": "Amlodipine + Valsartan",
+    "description": "Combination antihypertensive for blood pressure control.",
+    "medicine_type": "tablet",
+    "variants": ["Ambiretic 5/80mg", "Ambiretic 10/160mg"],
+    "side_effects": [
+      "Dizziness",
+      "Swelling",
+      "Fatigue",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antihypertensive"
+  },
+  {
+    "id": 39,
+    "name": "Fern-C",
+    "generic_name": "Vitamin C + Zinc",
+    "description": "Vitamin C with Zinc for immune system support.",
+    "medicine_type": "tablet",
+    "variants": ["Fern-C 500mg"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Metallic taste"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 40,
+    "name": "Ceelin",
+    "generic_name": "Vitamin C",
+    "description": "Vitamin C supplement for children and adults.",
+    "medicine_type": "tablet",
+    "variants": ["Ceelin 100mg", "Ceelin Drops"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Diarrhea (high doses)"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Vitamin supplement"
+  },
+  {
+    "id": 41,
+    "name": "Enervon",
+    "generic_name": "Multivitamins + Minerals",
+    "description": "Complete multivitamin and mineral supplement.",
+    "medicine_type": "tablet",
+    "variants": ["Enervon", "Enervon-C"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Urine discoloration"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Multivitamin"
+  },
+  {
+    "id": 42,
+    "name": "Omeprazole",
+    "generic_name": "Omeprazole",
+    "description": "Proton pump inhibitor for acid reflux and ulcers.",
+    "medicine_type": "capsule",
+    "variants": ["Omeprazole 20mg", "Omeprazole 40mg"],
+    "side_effects": [
+      "Headache",
+      "Nausea",
+      "Diarrhea",
+      "Stomach pain"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Proton pump inhibitor"
+  },
+  {
+    "id": 43,
+    "name": "Aspirin",
+    "generic_name": "Acetylsalicylic Acid",
+    "description": "Pain reliever and blood thinner for heart protection.",
+    "medicine_type": "tablet",
+    "variants": ["Aspirin 80mg", "Aspirin 325mg"],
+    "side_effects": [
+      "Stomach irritation",
+      "Nausea",
+      "Bleeding risk",
+      "Allergic reaction"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Pain reliever"
+  },
+  {
+    "id": 44,
+    "name": "Dolfenal",
+    "generic_name": "Diclofenac Sodium",
+    "description": "Anti-inflammatory for pain and swelling relief.",
+    "medicine_type": "tablet",
+    "variants": ["Dolfenal 50mg"],
+    "side_effects": [
+      "Stomach upset",
+      "Nausea",
+      "Dizziness",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anti-inflammatory"
+  },
+  {
+    "id": 45,
+    "name": "Tuseran",
+    "generic_name": "Dextromethorphan + Phenylephrine + Paracetamol",
+    "description": "Cough suppressant with decongestant and pain reliever.",
+    "medicine_type": "tablet",
+    "variants": ["Tuseran Forte", "Tuseran Night"],
+    "side_effects": [
+      "Drowsiness",
+      "Dizziness",
+      "Nausea",
+      "Dry mouth"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Cough suppressant"
+  },
+  {
+    "id": 46,
+    "name": "Ambroxol",
+    "generic_name": "Ambroxol HCl",
+    "description": "Mucolytic for productive cough and respiratory disorders.",
+    "medicine_type": "tablet",
+    "variants": ["Ambroxol 30mg"],
+    "side_effects": [
+      "Nausea",
+      "Stomach upset",
+      "Diarrhea",
+      "Headache"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Mucolytic"
+  },
+  {
+    "id": 47,
+    "name": "Allerta",
+    "generic_name": "Loratadine",
+    "description": "Non-drowsy antihistamine for allergies.",
+    "medicine_type": "tablet",
+    "variants": ["Allerta 10mg"],
+    "side_effects": [
+      "Headache",
+      "Fatigue",
+      "Dry mouth",
+      "Nausea"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antihistamine"
+  },
+  {
+    "id": 48,
+    "name": "Decolsin",
+    "generic_name": "Phenylephrine + Chlorphenamine + Paracetamol",
+    "description": "Multi-symptom cold and flu relief.",
+    "medicine_type": "tablet",
+    "variants": ["Decolsin"],
+    "side_effects": [
+      "Drowsiness",
+      "Dizziness",
+      "Dry mouth",
+      "Nausea"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Cold and flu relief"
+  },
+  {
+    "id": 49,
+    "name": "Nafarin",
+    "generic_name": "Sodium Warfarin",
+    "description": "Anticoagulant for blood clot prevention.",
+    "medicine_type": "tablet",
+    "variants": ["Nafarin 1mg", "Nafarin 2mg", "Nafarin 5mg"],
+    "side_effects": [
+      "Bleeding risk",
+      "Bruising",
+      "Nausea",
+      "Hair loss"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Anticoagulant"
+  },
+  {
+    "id": 50,
+    "name": "Buscopan",
+    "generic_name": "Hyoscine Butylbromide",
+    "description": "Antispasmodic for abdominal cramps and irritable bowel syndrome.",
+    "medicine_type": "tablet",
+    "variants": ["Buscopan 10mg", "Buscopan Plus"],
+    "side_effects": [
+      "Dry mouth",
+      "Constipation",
+      "Blurred vision",
+      "Dizziness"
+    ],
+    "storage": "Store below 30°C, away from direct sunlight and moisture.",
+    "category": "Antispasmodic"
+  },
+  {
+    "id": 51,
+    "name": "Not a medicine",
+    "generic_name": "N/A",
+    "description": "This object is not identified as a medicine. Please scan a valid medicine.",
+    "medicine_type": "tablet",
+    "variants": ["N/A"],
+    "side_effects": [
+      "N/A"
+    ],
+    "storage": "N/A",
+    "category": "Not applicable"
+  }
+]

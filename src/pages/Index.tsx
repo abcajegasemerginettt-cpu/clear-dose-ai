@@ -1,39 +1,38 @@
 import { Camera, Zap, Shield, Smartphone, Scan, Database, Activity } from "lucide-react";
 import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
-import { MedicineSuggestions } from "@/components/MedicineSuggestions";
+// import { MedicineSuggestions } from "@/components/MedicineSuggestions";
 import { ScanHistory } from "@/components/ScanHistory";
 import LaserFlow from "@/components/LaserFlow";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 interface Medicine {
-  id: string;
+  id: number;
   name: string;
-  dosage: string;
+  generic_name: string;
   description: string;
-  side_effects: string[];
-  manufacturer: string;
   medicine_type: 'tablet' | 'capsule';
-  image_url?: string;
-  shape?: string;
-  color?: string;
-  size?: string;
+  variants: string[];
+  side_effects: string[];
+  storage: string;
+  category: string;
   confidence?: number;
 }
 
 const Index = () => {
   const [scannedMedicine, setScannedMedicine] = useState<Medicine | null>(null);
-  const [medicineSuggestions, setMedicineSuggestions] = useState<Medicine[]>([]);
-  const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
+  // const [medicineSuggestions, setMedicineSuggestions] = useState<Medicine[]>([]);
+  // const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
 
   const handleScanComplete = (medicine: Medicine) => {
     setScannedMedicine(medicine);
     // Clear suggestions when a medicine is directly selected
-    setMedicineSuggestions([]);
-    setClassifiedType(null);
+    // setMedicineSuggestions([]);
+    // setClassifiedType(null);
   };
 
+  /*
   const handleSuggestionsReady = (suggestions: Medicine[], type: 'tablet' | 'capsule') => {
     setMedicineSuggestions(suggestions);
     setClassifiedType(type);
@@ -47,6 +46,7 @@ const Index = () => {
     setMedicineSuggestions([]);
     setClassifiedType(null);
   };
+  */
 
   const [showScanner, setShowScanner] = useState(false);
 
@@ -92,7 +92,8 @@ const Index = () => {
               </Button>
             </div>
 
-            {/* Feature Grid */}
+            {/*
+            // Feature Grid
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16 max-w-4xl mx-auto">
               <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all">
                 <div className="rounded-full bg-white/20 p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -118,6 +119,7 @@ const Index = () => {
                 <p className="text-sm text-white/70">Get medicine details and safety information in seconds</p>
               </div>
             </div>
+            */}
 
             {/* Disclaimer */}
             <div className="pt-8 max-w-2xl mx-auto">
@@ -152,21 +154,13 @@ const Index = () => {
               <div className="space-y-6">
                 <CameraScanner 
                   onScanComplete={handleScanComplete}
-                  onSuggestionsReady={handleSuggestionsReady}
+                  // onSuggestionsReady={handleSuggestionsReady}
                 />
               </div>
               
               {/* Medicine Info */}
               <div className="space-y-6">
-                {medicineSuggestions.length > 0 && classifiedType ? (
-                  <MedicineSuggestions 
-                    suggestions={medicineSuggestions}
-                    classifiedType={classifiedType}
-                    onSelectMedicine={handleMedicineSelection}
-                  />
-                ) : (
                   <MedicineInfo medicine={scannedMedicine} />
-                )}
               </div>
             </div>
             
