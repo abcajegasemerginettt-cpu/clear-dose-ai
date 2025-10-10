@@ -2,7 +2,7 @@ import { Smartphone, Scan, ArrowRight } from "lucide-react";
 import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
 import { ScanHistory } from "@/components/ScanHistory";
-import LaserFlow from "@/components/LaserFlow";
+import LaserBeam from "@/components/LaserBeam";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -51,21 +51,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Laser Flow Background */}
+      {/* Laser Beam Background */}
       <div className="fixed inset-0 z-0 bg-black">
-        <LaserFlow 
-          color="#FF0000"
-          horizontalBeamOffset={0.8}
-          verticalBeamOffset={0.8}
-          wispDensity={2.5}
-          fogIntensity={2.5}
-          verticalSizing={4.0}
-          horizontalSizing={0.2}
-          decay={0.8}
-          falloffStart={2.5}
-          wispSpeed={12.0}
-          wispIntensity={8.0}
-        />
+        <LaserBeam />
       </div>
 
       {!showScanner ? (
