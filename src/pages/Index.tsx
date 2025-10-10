@@ -1,7 +1,6 @@
-import { Camera, Zap, Shield, Smartphone, Scan, Database, Activity } from "lucide-react";
+import { Smartphone, Scan, ArrowRight } from "lucide-react";
 import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
-// import { MedicineSuggestions } from "@/components/MedicineSuggestions";
 import { ScanHistory } from "@/components/ScanHistory";
 import LaserFlow from "@/components/LaserFlow";
 import { Button } from "@/components/ui/button";
@@ -56,80 +55,65 @@ const Index = () => {
       <div className="fixed inset-0 z-0">
         <LaserFlow 
           color="#A50000"
-          horizontalBeamOffset={0.1}
-          verticalBeamOffset={0.0}
-          wispDensity={1.2}
-          fogIntensity={0.6}
+          horizontalBeamOffset={0.5}
+          verticalBeamOffset={0.3}
+          wispDensity={0.8}
+          fogIntensity={0.8}
+          verticalSizing={3.0}
+          horizontalSizing={0.3}
         />
       </div>
 
       {!showScanner ? (
         /* Landing Page */
-        <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
-          <div className="max-w-5xl mx-auto text-center space-y-8">
-            {/* Main Heading */}
-            <div className="space-y-4">
-              <h1 className="text-6xl md:text-8xl font-bold text-white drop-shadow-2xl">
-                MedLens AI
-              </h1>
-              <p className="text-xl md:text-3xl text-white/90 max-w-3xl mx-auto drop-shadow-lg">
-                AI-Powered Medicine Identification
-              </p>
-              <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
-                Instantly identify tablets and capsules with advanced computer vision technology
-              </p>
-            </div>
-
-            {/* CTA Button */}
-            <div className="pt-8">
-              <Button 
-                onClick={() => setShowScanner(true)}
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90 text-lg px-12 py-6 h-auto rounded-full shadow-2xl hover:scale-105 transition-transform"
-              >
-                <Scan className="mr-2 h-6 w-6" />
-                Start Scanning
-              </Button>
-            </div>
-
-            {/*
-            // Feature Grid
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16 max-w-4xl mx-auto">
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all">
-                <div className="rounded-full bg-white/20 p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Camera className="h-8 w-8 text-white" />
+        <>
+          {/* Navigation Bar */}
+          <nav className="relative z-10 border-b border-white/10 backdrop-blur-sm bg-black/20">
+            <div className="container mx-auto px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Scan className="h-6 w-6 text-white" />
+                  <span className="text-xl font-bold text-white">MedLens AI</span>
                 </div>
-                <h3 className="font-semibold text-xl text-white mb-2">AI-Powered Scanning</h3>
-                <p className="text-sm text-white/70">Advanced computer vision for accurate medicine identification</p>
-              </div>
-              
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all">
-                <div className="rounded-full bg-white/20 p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Database className="h-8 w-8 text-white" />
+                <div className="flex items-center gap-4">
+                  <Button 
+                    variant="ghost" 
+                    className="text-white hover:bg-white/10"
+                    onClick={() => setShowScanner(true)}
+                  >
+                    Get Started
+                  </Button>
                 </div>
-                <h3 className="font-semibold text-xl text-white mb-2">Comprehensive Database</h3>
-                <p className="text-sm text-white/70">Access detailed medicine information and safety data</p>
-              </div>
-              
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all">
-                <div className="rounded-full bg-white/20 p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Activity className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="font-semibold text-xl text-white mb-2">Instant Results</h3>
-                <p className="text-sm text-white/70">Get medicine details and safety information in seconds</p>
               </div>
             </div>
-            */}
+          </nav>
 
-            {/* Disclaimer */}
-            <div className="pt-8 max-w-2xl mx-auto">
-              <p className="text-xs text-white/50">
-                <strong>Medical Disclaimer:</strong> This tool is for informational purposes only. 
-                Always consult healthcare professionals for medical advice.
-              </p>
+          {/* Hero Section */}
+          <div className="relative z-10 min-h-[calc(100vh-73px)] flex items-center px-6">
+            <div className="container mx-auto">
+              <div className="max-w-2xl">
+                <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
+                  AI-Powered Medicine Scanner
+                </h1>
+                <p className="text-xl md:text-2xl text-white/70 mb-8 leading-relaxed">
+                  Instantly identify tablets and capsules with advanced computer vision technology. Get detailed information in seconds.
+                </p>
+                <Button 
+                  onClick={() => setShowScanner(true)}
+                  size="lg"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-base px-8 py-6 h-auto rounded-full group transition-all"
+                >
+                  Start Scanning
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                <p className="text-xs text-white/40 mt-6">
+                  <strong>Medical Disclaimer:</strong> This tool is for informational purposes only. 
+                  Always consult healthcare professionals for medical advice.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       ) : (
         /* Scanner Interface */
         <>
