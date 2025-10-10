@@ -50,15 +50,15 @@ const Index = () => {
   const [showScanner, setShowScanner] = useState(false);
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-black">
+    <div className="min-h-screen relative overflow-hidden">
       {/* Laser Flow Background */}
       <div className="fixed inset-0 z-0 bg-black">
         <LaserFlow 
-          color="#A50000"
+          color="#FF0000"
           horizontalBeamOffset={0.5}
           verticalBeamOffset={0.3}
-          wispDensity={0.8}
-          fogIntensity={0.8}
+          wispDensity={1.2}
+          fogIntensity={1.2}
           verticalSizing={3.0}
           horizontalSizing={0.3}
         />
