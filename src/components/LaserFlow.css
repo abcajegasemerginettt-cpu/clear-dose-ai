@@ -3,4 +3,9 @@
   height: 100%;
   position: relative;
   pointer-events: none;
+  background: #000000;
+}
+
+.laser-flow-container canvas {
+  background: #000000 !important;
 }
