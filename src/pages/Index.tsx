@@ -87,24 +87,24 @@ const Index = () => {
           </nav>
 
           {/* Hero Section */}
-          <div className="relative z-10 min-h-[calc(100vh-73px)] flex items-center px-6">
+          <div className="relative z-10 min-h-[calc(100vh-73px)] flex items-center px-4 sm:px-6">
             <div className="container mx-auto">
               <div className="max-w-2xl">
-                <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight">
                   AI-Powered Medicine Scanner
                 </h1>
-                <p className="text-xl md:text-2xl text-white/70 mb-8 leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/70 mb-6 sm:mb-8 leading-relaxed">
                   Instantly identify tablets and capsules with advanced computer vision technology. Get detailed information in seconds.
                 </p>
                 <Button 
                   onClick={() => setShowScanner(true)}
                   size="lg"
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-base px-8 py-6 h-auto rounded-full group transition-all"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-sm sm:text-base px-6 sm:px-8 py-4 sm:py-6 h-auto rounded-full group transition-all"
                 >
                   Start Scanning
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <p className="text-xs text-white/40 mt-6">
+                <p className="text-xs text-white/40 mt-4 sm:mt-6">
                   <strong>Medical Disclaimer:</strong> This tool is for informational purposes only. 
                   Always consult healthcare professionals for medical advice.
                 </p>
@@ -117,12 +117,12 @@ const Index = () => {
         <>
           {/* Hero Section */}
           <div className="relative overflow-hidden z-10">
-            <div className="relative container mx-auto px-4 py-16">
-              <div className="text-center space-y-6 mb-auto">
-                <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-2xl">
+            <div className="relative container mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
+              <div className="text-center space-y-4 sm:space-y-6 mb-auto">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white drop-shadow-2xl">
                   MedLens AI
                 </h1>
-                <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto drop-shadow-lg">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 max-w-3xl mx-auto drop-shadow-lg px-4">
                   Instantly identify medicines using advanced AI technology
                 </p>
               </div>
@@ -130,10 +130,10 @@ const Index = () => {
           </div>
 
           {/* Scanner Section */}
-          <div className="relative z-10 container mx-auto px-4 py-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
               {/* Camera Scanner */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <CameraScanner 
                   onScanComplete={handleScanComplete}
                   // onSuggestionsReady={handleSuggestionsReady}
@@ -141,29 +141,29 @@ const Index = () => {
               </div>
               
               {/* Medicine Info */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                   <MedicineInfo medicine={scannedMedicine} />
               </div>
             </div>
             
             {/* Scan History */}
-            <div className="mt-12 max-w-4xl mx-auto">
+            <div className="mt-8 sm:mt-12 max-w-4xl mx-auto">
               <ScanHistory />
             </div>
           </div>
 
           {/* Footer */}
-          <footer className="relative z-10 backdrop-blur-md bg-black/30 border-t border-white/10 mt-16">
-            <div className="container mx-auto px-4 py-8">
-              <div className="text-center space-y-4">
+          <footer className="relative z-10 backdrop-blur-md bg-black/30 border-t border-white/10 mt-8 sm:mt-12 md:mt-16">
+            <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+              <div className="text-center space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-center gap-2">
-                  <Smartphone className="h-5 w-5 text-white" />
-                  <span className="font-semibold text-white">MedLens AI</span>
+                  <Smartphone className="h-4 sm:h-5 w-4 sm:w-5 text-white" />
+                  <span className="font-semibold text-white text-sm sm:text-base">MedLens AI</span>
                 </div>
-                <p className="text-sm text-white/70">
+                <p className="text-xs sm:text-sm text-white/70">
                   © 2025 MedLens AI. All rights reserved.
                 </p>
-                <p className="text-xs text-white/50 max-w-2xl mx-auto">
+                <p className="text-xs text-white/50 max-w-2xl mx-auto px-4">
                   <strong>Disclaimer:</strong> This app is for informational purposes only. 
                   Always consult healthcare professionals for medical advice.
                 </p>

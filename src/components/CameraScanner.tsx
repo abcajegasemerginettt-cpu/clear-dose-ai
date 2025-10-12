@@ -454,7 +454,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
 
   return (
     <Card className="glass-card overflow-hidden border-2">
-      <div className="relative aspect-video bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-blue-950/30 dark:to-emerald-950/30">
+      <div className="relative aspect-video w-full bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-blue-950/30 dark:to-emerald-950/30">
         {renderStepContent()}
       </div>
       {/* Hidden canvas for image capture */}

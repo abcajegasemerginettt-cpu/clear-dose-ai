@@ -307,12 +307,17 @@ export const LaserFlow = ({
     const mount = mountRef.current;
     if (!mount) return;
 
+    // Detect mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                     window.innerWidth < 768 ||
+                     ('ontouchstart' in window);
+
     const renderer = new THREE.WebGLRenderer({
       antialias: false,
       alpha: false,
       depth: false,
       stencil: false,
-      powerPreference: 'high-performance',
+      powerPreference: isMobile ? 'default' : 'high-performance',
       premultipliedAlpha: false,
       preserveDrawingBuffer: false,
       failIfMajorPerformanceCaveat: false,
@@ -320,7 +325,9 @@ export const LaserFlow = ({
     });
     rendererRef.current = renderer;
 
-    baseDprRef.current = Math.min(dpr ?? (window.devicePixelRatio || 1), 2);
+    // Reduce DPR on mobile for better performance
+    const maxDpr = isMobile ? 1 : 2;
+    baseDprRef.current = Math.min(dpr ?? (window.devicePixelRatio || 1), maxDpr);
     currentDprRef.current = baseDprRef.current;
 
     renderer.setPixelRatio(currentDprRef.current);
@@ -342,11 +349,14 @@ export const LaserFlow = ({
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3));
 
+    // Reduce effects on mobile for better performance (using isMobile from above)
+    const mobileScale = isMobile ? 0.6 : 1.0;
+
     const uniforms = {
       iTime: { value: 0 },
       iResolution: { value: new THREE.Vector3(1, 1, 1) },
       iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
-      uWispDensity: { value: wispDensity },
+      uWispDensity: { value: wispDensity * mobileScale },
       uTiltScale: { value: mouseTiltStrength },
       uFlowTime: { value: 0 },
       uFogTime: { value: 0 },
@@ -355,10 +365,10 @@ export const LaserFlow = ({
       uFlowSpeed: { value: flowSpeed },
       uVLenFactor: { value: verticalSizing },
       uHLenFactor: { value: horizontalSizing },
-      uFogIntensity: { value: fogIntensity },
+      uFogIntensity: { value: fogIntensity * mobileScale },
       uFogScale: { value: fogScale },
       uWSpeed: { value: wispSpeed },
-      uWIntensity: { value: wispIntensity },
+      uWIntensity: { value: wispIntensity * mobileScale },
       uFlowStrength: { value: flowStrength },
       uDecay: { value: decay },
       uFalloffStart: { value: falloffStart },

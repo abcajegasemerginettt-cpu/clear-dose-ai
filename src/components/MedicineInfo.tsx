@@ -41,21 +41,21 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
   }
 
   return (
-    <Card className="glass-card p-6 space-y-6">
-      <div className="flex items-start justify-between">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg medical-gradient p-2">
-              <Pill className="h-6 w-6 text-white" />
+    <Card className="glass-card p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+        <div className="space-y-2 w-full">
+          <div className="flex items-start gap-3">
+            <div className="rounded-lg medical-gradient p-2 flex-shrink-0">
+              <Pill className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
-            <div>
-              <h3 className="text-2xl font-bold">{medicine.name}</h3>
-              <p className="text-sm text-muted-foreground">{medicine.generic_name}</p>
-              <div className="flex items-center gap-2 mt-2">
-                <Badge className="bg-primary/10 text-primary border-primary/20">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-xl sm:text-2xl font-bold break-words">{medicine.name}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground break-words">{medicine.generic_name}</p>
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
                   {medicine.medicine_type.toUpperCase()}
                 </Badge>
-                <Badge variant="outline">
+                <Badge variant="outline" className="text-xs">
                   {medicine.category}
                 </Badge>
               </div>
@@ -64,13 +64,13 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
           {medicine.confidence && (
             <Badge 
               variant="secondary" 
-              className="bg-primary/10 text-primary border-primary/20"
+              className="bg-primary/10 text-primary border-primary/20 text-xs"
             >
               {medicine.confidence}% Confidence
             </Badge>
           )}
         </div>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2 w-full sm:w-auto flex-shrink-0">
           <Download className="h-4 w-4" />
           Export
         </Button>
