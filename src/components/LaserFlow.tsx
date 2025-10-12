@@ -332,7 +332,7 @@ export const LaserFlow = ({
 
     renderer.setPixelRatio(currentDprRef.current);
     renderer.shadowMap.enabled = false;
-    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setClearColor(0x000000, 1);
     const canvas = renderer.domElement;
     canvas.style.width = '100%';
@@ -349,14 +349,11 @@ export const LaserFlow = ({
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3));
 
-    // Reduce effects on mobile for better performance (using isMobile from above)
-    const mobileScale = isMobile ? 0.6 : 1.0;
-
     const uniforms = {
       iTime: { value: 0 },
       iResolution: { value: new THREE.Vector3(1, 1, 1) },
       iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
-      uWispDensity: { value: wispDensity * mobileScale },
+      uWispDensity: { value: wispDensity },
       uTiltScale: { value: mouseTiltStrength },
       uFlowTime: { value: 0 },
       uFogTime: { value: 0 },
@@ -365,10 +362,10 @@ export const LaserFlow = ({
       uFlowSpeed: { value: flowSpeed },
       uVLenFactor: { value: verticalSizing },
       uHLenFactor: { value: horizontalSizing },
-      uFogIntensity: { value: fogIntensity * mobileScale },
+      uFogIntensity: { value: fogIntensity },
       uFogScale: { value: fogScale },
       uWSpeed: { value: wispSpeed },
-      uWIntensity: { value: wispIntensity * mobileScale },
+      uWIntensity: { value: wispIntensity },
       uFlowStrength: { value: flowStrength },
       uDecay: { value: decay },
       uFalloffStart: { value: falloffStart },

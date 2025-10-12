@@ -55,10 +55,19 @@ const Index = () => {
       <div className="fixed inset-0 z-0 bg-black" style={{ height: '100vh', width: '100vw' }}>
         <LaserFlow 
           color="#A50000"
-          horizontalBeamOffset={0.1}
+          horizontalBeamOffset={0.25}
           verticalBeamOffset={0.0}
-          wispDensity={1.2}
-          fogIntensity={0.6}
+          wispDensity={1.6}
+          wispIntensity={8.0}
+          wispSpeed={14.0}
+          flowStrength={0.5}
+          verticalSizing={3.2}
+          horizontalSizing={0.4}
+          fogIntensity={0.8}
+          fogScale={0.28}
+          fogFallSpeed={1.0}
+          decay={0.9}
+          falloffStart={2.2}
         />
       </div>
 
