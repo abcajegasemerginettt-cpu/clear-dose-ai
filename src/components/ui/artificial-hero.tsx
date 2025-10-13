@@ -476,7 +476,7 @@ export const Component = () => {
           textTransform: 'uppercase',
           opacity: 0.7
         }}>
-          Art & Design by @scottclayton
+          Art & Design by @angelocajegas
         </div>
       </div>
 
