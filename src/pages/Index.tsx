@@ -2,8 +2,7 @@ import { Smartphone, Scan, ArrowRight } from "lucide-react";
 import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
 import { ScanHistory } from "@/components/ScanHistory";
-import LaserFlow from "@/components/LaserFlow";
-import PixelBlast from "@/components/PixelBlast";
+import { Component as ArtificialHero } from "@/components/ui/artificial-hero";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -52,48 +51,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* PixelBlast Background Layer */}
-      <div className="fixed inset-0 z-0 bg-black" style={{ height: '100vh', width: '100vw' }}>
-        <PixelBlast
-          variant="circle"
-          pixelSize={6}
-          color="#FFFFFF"
-          patternScale={3}
-          patternDensity={1.2}
-          pixelSizeJitter={0.5}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
-          liquid
-          liquidStrength={0.12}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
-          speed={0.6}
-          edgeFade={0.25}
-          transparent
-        />
-      </div>
-
-      {/* Laser Flow Overlay */}
-      <div className="fixed inset-0 z-0 bg-transparent pointer-events-none" style={{ height: '100vh', width: '100vw' }}>
-        <LaserFlow 
-          color="#A50000"
-          horizontalBeamOffset={0.25}
-          verticalBeamOffset={0.0}
-          wispDensity={1.6}
-          wispIntensity={8.0}
-          wispSpeed={14.0}
-          flowStrength={0.5}
-          verticalSizing={3.2}
-          horizontalSizing={0.4}
-          fogIntensity={0.8}
-          fogScale={0.28}
-          fogFallSpeed={1.0}
-          decay={0.9}
-          falloffStart={2.2}
-        />
-      </div>
+      {/* Artificial Hero Background */}
+      <ArtificialHero />
 
       {!showScanner ? (
         /* Landing Page */
