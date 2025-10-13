@@ -58,14 +58,13 @@ const Index = () => {
         <div className="fixed inset-0" style={{ height: '100vh', width: '100vw' }}>
           <ArtificialHero />
           {/* Overlay button to enter scanner */}
-          <Button 
+          <button 
             onClick={() => setShowScanner(true)}
-            size="lg"
-            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[200] bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-sm sm:text-base px-8 py-6 h-auto rounded-full group transition-all"
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[200] bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-sm sm:text-base px-8 py-6 h-auto rounded-full group transition-all flex items-center"
           >
             Start Scanning
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          </button>
         </div>
       ) : (
         /* Scanner Interface */
