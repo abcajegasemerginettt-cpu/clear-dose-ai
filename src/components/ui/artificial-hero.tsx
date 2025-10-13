@@ -215,24 +215,26 @@ export const Component = () => {
       const width = canvas.width = grainCanvas.width = window.innerWidth;
       const height = canvas.height = grainCanvas.height = window.innerHeight;
       
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0, 0, width, height);
-      
       const centerX = width / 2;
       const centerY = height / 2;
       const radius = Math.min(width, height) * 0.2;
       
-      // Atmospheric background
+      // Dark blue/purple gradient background
       const bgGradient = ctx.createRadialGradient(
         centerX, centerY - 50, 0,
         centerX, centerY, Math.max(width, height) * 0.8
       );
       
-      const hue = 180 + params.atmosphereShift * 60;
-      bgGradient.addColorStop(0, `hsla(${hue + 40}, 80%, 60%, 0.4)`);
-      bgGradient.addColorStop(0.3, `hsla(${hue}, 60%, 40%, 0.3)`);
-      bgGradient.addColorStop(0.6, `hsla(${hue - 20}, 40%, 20%, 0.2)`);
-      bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0.9)');
+      bgGradient.addColorStop(0, 'rgba(80, 60, 140, 0.6)');
+      bgGradient.addColorStop(0.3, 'rgba(50, 40, 100, 0.5)');
+      bgGradient.addColorStop(0.6, 'rgba(30, 25, 70, 0.4)');
+      bgGradient.addColorStop(1, 'rgba(15, 15, 35, 1)');
+      
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, width, height);
+      
+      // Purple hue for orb
+      const hue = 260 + params.atmosphereShift * 20;
       
       ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, width, height);
@@ -344,7 +346,7 @@ export const Component = () => {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%', background: '#000' }}>
+    <div ref={containerRef} style={{ width: '100%', height: '100%', background: 'linear-gradient(180deg, rgb(20, 20, 45) 0%, rgb(10, 10, 25) 100%)' }}>
       {/* Navigation*/}
       <nav style={{
         position: 'fixed',
@@ -411,24 +413,24 @@ export const Component = () => {
       {/* Large text*/}
       <div style={{
         position: 'fixed',
-        bottom: '15%',
+        top: '50%',
         left: 0,
         right: 0,
         zIndex: 50,
-        transform: `translateY(${scrollProgressRef.current * 100}px)`,
+        transform: `translateY(-50%) translateY(${scrollProgressRef.current * 100}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 1.5),
         transition: 'transform 0.1s ease-out',
         pointerEvents: 'none'
       }}>
         <div style={{
           fontFamily: 'Arial Black, Arial, sans-serif',
-          fontSize: 'clamp(4rem, 15vw, 12rem)',
+          fontSize: 'clamp(5rem, 18vw, 16rem)',
           fontWeight: '900',
           color: 'white',
           textAlign: 'center',
           lineHeight: 0.8,
-          letterSpacing: '-0.02em',
-          textShadow: '0 0 50px rgba(255, 255, 255, 0.3)',
+          letterSpacing: '0.05em',
+          textShadow: '0 0 80px rgba(180, 140, 255, 0.6)',
           filter: 'contrast(1.2)'
         }}>
           ARTIFICIAL
