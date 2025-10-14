@@ -1,16 +1,24 @@
-import { Camera, Scan, Upload, ArrowLeft, Check } from "lucide-react";
+import { Camera, Scan, Upload, ArrowLeft, Check, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { loadModel, predict, getTopPrediction } from '@/utils/teachableMachine';
+import { loadModel, predict, getTopPrediction, getTopPredictions } from '@/utils/teachableMachine';
 import medicinesData from '@/data/medicines.json';
+
+interface PredictionResult {
+  name: string;
+  confidence: number;
+}
 
 interface CameraScannerProps {
   onScanComplete?: (result: any) => void;
   onSuggestionsReady?: (suggestions: Medicine[], classifiedType: 'tablet' | 'capsule') => void;
+  onScanReset?: () => void;
+  onScanSaved?: () => void;
+  onConfidenceData?: (predictions: PredictionResult[]) => void;
   onError?: (error: {
     type: 'low_confidence' | 'not_found' | 'general';
     message: string;
@@ -20,7 +28,7 @@ interface CameraScannerProps {
   }) => void;
 }
 
-type WorkflowStep = 'capture' | 'classify';
+type WorkflowStep = 'capture' | 'classify' | 'result';
 
 interface Medicine {
   id: number;
@@ -35,7 +43,7 @@ interface Medicine {
   confidence?: number;
 }
 
-export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: CameraScannerProps) => {
+export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset, onScanSaved, onConfidenceData, onError }: CameraScannerProps) => {
   const [currentStep, setCurrentStep] = useState<WorkflowStep>('capture');
   const [isScanning, setIsScanning] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -45,6 +53,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
   const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
   const [suggestedMedicines, setSuggestedMedicines] = useState<Medicine[]>([]);
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
+  const [scanResult, setScanResult] = useState<Medicine | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -187,6 +196,10 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
         toast.error("Failed to save scan to history");
       } else {
         console.log("Scan saved to history successfully");
+        // Trigger scan history refresh after successful save
+        if (onScanSaved) {
+          onScanSaved();
+        }
       }
     } catch (error) {
       console.error("Error in saveScanToHistory:", error);
@@ -207,8 +220,18 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
 
       const predictions = await predict(imageElement);
       const topPrediction = getTopPrediction(predictions);
+      const top3Predictions = getTopPredictions(predictions, 3);
       const confidence = Math.round(topPrediction.probability * 100);
       const medicineName = topPrediction.className;
+
+      // Send confidence data for display
+      if (onConfidenceData) {
+        const confidenceResults: PredictionResult[] = top3Predictions.map(pred => ({
+          name: pred.className,
+          confidence: Math.round(pred.probability * 100)
+        }));
+        onConfidenceData(confidenceResults);
+      }
 
       const foundMedicine = medicinesData.find(
         med => med.name.toLowerCase() === medicineName.toLowerCase()
@@ -242,15 +265,14 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
         confidence: confidence
       };
 
+      setScanResult(result);
+      setCurrentStep('result');
+      
       if (onScanComplete) {
         onScanComplete(result);
       }
 
       saveScanToHistory(result);
-
-      setTimeout(() => {
-        resetWorkflow();
-      }, 1500);
 
     } catch (error) {
       console.error("Classification error:", error);
@@ -344,8 +366,19 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
     setClassifiedType(null);
     setSuggestedMedicines([]);
     setSelectedMedicine(null);
+    setScanResult(null);
     setError(null);
     setIsProcessing(false);
+    
+    // Clear confidence data
+    if (onConfidenceData) {
+      onConfidenceData([]);
+    }
+    
+    // Call the parent reset callback to clear medicine info
+    if (onScanReset) {
+      onScanReset();
+    }
   };
 
   // Step 1: Capture UI
@@ -382,42 +415,42 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
     }
 
     return (
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8">
-        <div className="rounded-full bg-primary/10 p-6 backdrop-blur-sm">
-          <Camera className="h-16 w-16 text-primary" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 sm:gap-4 p-3 sm:p-4">
+        <div className="rounded-full bg-primary/10 p-3 sm:p-4 backdrop-blur-sm">
+          <Camera className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 text-primary" />
         </div>
-        <div className="text-center space-y-2">
-          <h3 className="text-xl font-semibold">Ready to Scan</h3>
-          <p className="text-sm text-muted-foreground max-w-md">
+        <div className="text-center space-y-1 sm:space-y-2 max-w-sm mx-auto">
+          <h3 className="text-base sm:text-lg md:text-xl font-semibold">Ready to Scan</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground px-2 leading-tight">
             Take a photo or upload an image of your medicine for identification
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full max-w-xs sm:max-w-sm">
           <Button 
             onClick={startCamera}
-            size="lg"
-            className="medical-gradient text-white shadow-lg hover:shadow-xl transition-all"
+            size="sm"
+            className="medical-gradient text-white shadow-lg hover:shadow-xl transition-all flex-1 py-2 sm:py-3 text-xs sm:text-sm"
           >
-            <Camera className="mr-2 h-5 w-5" />
+            <Camera className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
             Start Camera
           </Button>
           <Button 
             onClick={() => fileInputRef.current?.click()}
-            size="lg"
+            size="sm"
             variant="outline"
-            className="shadow-lg hover:shadow-xl transition-all"
+            className="shadow-lg hover:shadow-xl transition-all flex-1 py-2 sm:py-3 text-xs sm:text-sm"
           >
-            <Upload className="mr-2 h-5 w-5" />
+            <Upload className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
             Upload Photo
           </Button>
         </div>
         {hasPermission === false && (
-          <p className="text-sm text-destructive">
+          <p className="text-xs text-destructive text-center px-2">
             Camera access denied. Please enable camera permissions.
           </p>
         )}
         {error && (
-          <p className="text-sm text-destructive max-w-md text-center">
+          <p className="text-xs text-destructive max-w-sm text-center px-2">
             {error}
           </p>
         )}
@@ -449,26 +482,75 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
       </div>
 
       {/* Centered Classification Content */}
-      <div className="flex flex-col items-center justify-center h-full gap-6 p-8">
+      <div className="flex flex-col items-center justify-center h-full gap-3 sm:gap-4 p-3 sm:p-4">
         {capturedImage && (
-          <div className="glass-card p-3 rounded-xl">
+          <div className="glass-card p-2 sm:p-3 rounded-lg">
             <img 
               src={capturedImage} 
               alt="Captured medicine" 
-              className="w-32 h-32 object-cover rounded-lg shadow-lg" 
+              className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-cover rounded-md shadow-lg" 
             />
           </div>
         )}
         
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary/20 border-t-primary mx-auto"></div>
-          <div className="space-y-2">
-            <h3 className="text-xl font-semibold">Analyzing Image...</h3>
-            <p className="text-sm text-muted-foreground max-w-md">
+        <div className="text-center space-y-2 sm:space-y-3 max-w-xs sm:max-w-sm mx-auto">
+          <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 border-4 border-primary/20 border-t-primary mx-auto"></div>
+          <div className="space-y-1">
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold">Analyzing Image...</h3>
+            <p className="text-xs sm:text-sm text-muted-foreground px-2 leading-tight">
               Our AI is classifying your medicine as tablet or capsule
             </p>
           </div>
         </div>
+      </div>
+    </div>
+  );
+
+  // Step 3: Result UI
+  const renderResultStep = () => (
+    <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30">
+      {/* Centered Result Content */}
+      <div className="flex flex-col items-center justify-center h-full gap-2 sm:gap-3 p-3 sm:p-4">
+        {capturedImage && (
+          <div className="glass-card p-2 sm:p-3 rounded-lg">
+            <img 
+              src={capturedImage} 
+              alt="Scanned medicine" 
+              className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md shadow-lg" 
+            />
+          </div>
+        )}
+        
+        <div className="text-center space-y-1 sm:space-y-2 max-w-xs sm:max-w-sm mx-auto">
+          <div className="flex items-center justify-center gap-1 sm:gap-2 text-green-600">
+            <Check className="h-4 w-4 sm:h-5 sm:w-5" />
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold">Scan Complete!</h3>
+          </div>
+          
+          {scanResult && (
+            <div className="space-y-0.5 sm:space-y-1">
+              <p className="text-sm sm:text-base md:text-lg font-medium text-gray-800 dark:text-gray-200">
+                {scanResult.name}
+              </p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                Confidence: {scanResult.confidence}%
+              </p>
+            </div>
+          )}
+          
+          <p className="text-xs sm:text-sm text-muted-foreground px-1 leading-tight">
+            Medicine info displayed on the right. Ask AI for details.
+          </p>
+        </div>
+        
+        <Button 
+          onClick={resetWorkflow}
+          size="sm"
+          className="medical-gradient text-white shadow-lg hover:shadow-xl transition-all mt-1 sm:mt-2 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm"
+        >
+          <RotateCcw className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+          Scan Again
+        </Button>
       </div>
     </div>
   );
@@ -480,6 +562,8 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
         return renderCaptureStep();
       case 'classify':
         return renderClassifyStep();
+      case 'result':
+        return renderResultStep();
       default:
         return renderCaptureStep();
     }
@@ -487,7 +571,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: C
 
   return (
     <Card className="glass-card overflow-hidden border-2">
-      <div className="relative aspect-video w-full bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-blue-950/30 dark:to-emerald-950/30">
+      <div className="relative w-full h-[400px] sm:h-[450px] lg:h-[500px] bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-blue-950/30 dark:to-emerald-950/30">
         {renderStepContent()}
       </div>
       {/* Hidden canvas for image capture */}

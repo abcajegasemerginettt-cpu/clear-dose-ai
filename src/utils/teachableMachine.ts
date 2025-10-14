@@ -86,3 +86,12 @@ export const getTopPrediction = (predictions: Prediction[]): Prediction => {
     (prev.probability > current.probability) ? prev : current
   );
 };
+
+/**
+ * Get the top N predictions sorted by probability
+ */
+export const getTopPredictions = (predictions: Prediction[], count: number = 3): Prediction[] => {
+  return predictions
+    .sort((a, b) => b.probability - a.probability)
+    .slice(0, count);
+};
