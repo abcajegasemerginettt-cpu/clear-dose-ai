@@ -1,6 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Pill, AlertCircle, Info, Download } from "lucide-react";
+import { Pill, AlertCircle, Info, Download, FileText, FileSpreadsheet } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { exportToCSV, exportToJSON, exportToExcel } from "@/utils/exportUtils";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 interface Medicine {
@@ -22,6 +25,38 @@ interface MedicineInfoProps {
 }
 
 export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) => {
+  const handleExport = (format: 'csv' | 'json' | 'excel') => {
+    if (!medicine || medicine.name === 'Not a medicine') {
+      toast.error("No valid medicine data to export");
+      return;
+    }
+
+    const exportData = [{
+      'Name': medicine.name,
+      'Generic Name': medicine.generic_name,
+      'Description': medicine.description,
+      'Type': medicine.medicine_type,
+      'Category': medicine.category,
+      'Confidence': `${medicine.confidence}%`,
+      'Variants': medicine.variants.join(', '),
+      'Side Effects': medicine.side_effects.join(', '),
+      'Storage': medicine.storage
+    }];
+
+    switch (format) {
+      case 'csv':
+        exportToCSV(exportData, `${medicine.name}-details.csv`);
+        break;
+      case 'json':
+        exportToJSON(exportData, `${medicine.name}-details.json`);
+        break;
+      case 'excel':
+        exportToExcel(exportData, `${medicine.name}-details.xlsx`);
+        break;
+    }
+    
+    toast.success(`Data for ${medicine.name} exported as ${format.toUpperCase()}`);
+  };
   if (!medicine) {
     return (
       <Card className="glass-card p-8">
@@ -45,20 +80,22 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
         <div className="space-y-2 w-full">
           <div className="flex items-start gap-3">
-            <div className="rounded-lg medical-gradient p-2 flex-shrink-0">
+            <div className="rounded-lg p-2 medical-gradient">
               <Pill className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-xl sm:text-2xl font-bold break-words">{medicine.name}</h3>
               <p className="text-xs sm:text-sm text-muted-foreground break-words">{medicine.generic_name}</p>
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
-                  {medicine.medicine_type.toUpperCase()}
-                </Badge>
-                <Badge variant="outline" className="text-xs">
-                  {medicine.category}
-                </Badge>
-              </div>
+              {medicine.name !== 'Not a medicine' && (
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge className="bg-primary/10 text-primary border-primary/20">
+                    {medicine.medicine_type.toUpperCase()}
+                  </Badge>
+                  <Badge variant="outline">
+                    {medicine.category}
+                  </Badge>
+                </div>
+              )}
             </div>
           </div>
           {medicine.confidence && (
@@ -70,10 +107,28 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             </Badge>
           )}
         </div>
-        <Button variant="outline" size="sm" className="gap-2 w-full sm:w-auto flex-shrink-0">
-          <Download className="h-4 w-4" />
-          Export
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-2 w-full sm:w-auto flex-shrink-0" disabled={!medicine || medicine.name === 'Not a medicine'}>
+              <Download className="h-4 w-4" />
+              Export
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => handleExport('csv')}>
+              <FileText className="h-4 w-4 mr-2" />
+              Export as CSV
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleExport('json')}>
+              <FileText className="h-4 w-4 mr-2" />
+              Export as JSON
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleExport('excel')}>
+              <FileSpreadsheet className="h-4 w-4 mr-2" />
+              Export as Excel
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="space-y-4">

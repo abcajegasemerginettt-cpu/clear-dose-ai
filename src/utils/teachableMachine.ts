@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-const URL = "https://teachablemachine.withgoogle.com/models/zmLPLbJ58/";
+const URL = "https://teachablemachine.withgoogle.com/models/yNh0LxXIx/";
 
 let model: any = null;
 let maxPredictions: number = 0;

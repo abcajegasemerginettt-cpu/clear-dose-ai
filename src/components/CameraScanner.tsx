@@ -11,6 +11,13 @@ import medicinesData from '@/data/medicines.json';
 interface CameraScannerProps {
   onScanComplete?: (result: any) => void;
   onSuggestionsReady?: (suggestions: Medicine[], classifiedType: 'tablet' | 'capsule') => void;
+  onError?: (error: {
+    type: 'low_confidence' | 'not_found' | 'general';
+    message: string;
+    suggestion?: string;
+    confidence?: number;
+    medicineName?: string;
+  }) => void;
 }
 
 type WorkflowStep = 'capture' | 'classify';
@@ -28,7 +35,7 @@ interface Medicine {
   confidence?: number;
 }
 
-export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScannerProps) => {
+export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onError }: CameraScannerProps) => {
   const [currentStep, setCurrentStep] = useState<WorkflowStep>('capture');
   const [isScanning, setIsScanning] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -48,7 +55,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
     loadModel()
       .then(() => {
         console.log("Model loaded successfully!");
-        toast.success("AI model loaded successfully!");
+        // Removed toast notification for cleaner UX
       })
       .catch(err => {
         console.error("Model loading error:", err);
@@ -165,69 +172,95 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady }: CameraScan
   };
 
   // Step 2: Image Classification (Teachable Machine Integration)
+  const saveScanToHistory = async (medicine: Medicine) => {
+    try {
+      const { error } = await supabase
+        .from('scan_history')
+        .insert({
+          medicine_name: medicine.name,
+          confidence: medicine.confidence,
+          scanned_image_url: capturedImage
+        });
+
+      if (error) {
+        console.error("Error saving to scan history:", error);
+        toast.error("Failed to save scan to history");
+      } else {
+        console.log("Scan saved to history successfully");
+      }
+    } catch (error) {
+      console.error("Error in saveScanToHistory:", error);
+      toast.error("An unexpected error occurred while saving the scan");
+    }
+  };
+
   const classifyImage = async (imageData: string) => {
     setIsProcessing(true);
     try {
-      console.log("Starting image classification...");
-      
-      // Create image element from the captured/uploaded image
       const imageElement = new Image();
-      imageElement.crossOrigin = "anonymous"; // Add this for CORS
+      imageElement.crossOrigin = "anonymous";
       imageElement.src = imageData;
-      
       await new Promise((resolve, reject) => { 
         imageElement.onload = resolve;
         imageElement.onerror = reject;
       });
 
-      console.log("Image loaded, dimensions:", imageElement.width, "x", imageElement.height);
-
-      // Use Teachable Machine model to predict
-      console.log("Making prediction...");
       const predictions = await predict(imageElement);
-      console.log("All predictions:", predictions);
-      
       const topPrediction = getTopPrediction(predictions);
-      console.log("Top prediction:", topPrediction);
-      
       const confidence = Math.round(topPrediction.probability * 100);
       const medicineName = topPrediction.className;
 
-      console.log(`Final result: ${medicineName} with ${confidence}% confidence`);
-
-      // Find the medicine in our database
       const foundMedicine = medicinesData.find(
         med => med.name.toLowerCase() === medicineName.toLowerCase()
       );
 
       if (!foundMedicine) {
-        console.error(`Medicine "${medicineName}" not found in database`);
-        console.log("Available medicines:", medicinesData.map(m => m.name));
-        throw new Error(`Medicine "${medicineName}" not found in database.`);
+        if (onError) {
+          onError({
+            type: 'not_found',
+            message: `The item classified as "${medicineName}" is not a recognized medicine.`,
+            suggestion: "Please try a different item.",
+            confidence: confidence,
+            medicineName: medicineName
+          });
+        }
+        setCurrentStep('capture');
+        return;
       }
 
-      // Show classification result
-      toast.success(`Detected: ${medicineName} (${confidence}% confident)`);
-
-      // Prepare the result with confidence from the model
-      const result = {
+      const result: Medicine = {
         ...foundMedicine,
+        id: foundMedicine.id || 0,
+        name: foundMedicine.name || '',
+        generic_name: foundMedicine.generic_name || '',
+        description: foundMedicine.description || '',
+        medicine_type: foundMedicine.medicine_type as 'tablet' | 'capsule',
+        variants: foundMedicine.variants || [],
+        side_effects: foundMedicine.side_effects || [],
+        storage: foundMedicine.storage || '',
+        category: foundMedicine.category || '',
         confidence: confidence
       };
 
-      // Call onScanComplete with the detected medicine
       if (onScanComplete) {
         onScanComplete(result);
       }
 
-      // Show success message and reset after delay
+      saveScanToHistory(result);
+
       setTimeout(() => {
         resetWorkflow();
       }, 1500);
-      
+
     } catch (error) {
       console.error("Classification error:", error);
-      toast.error("Failed to classify image. Please try again.");
+      if (onError) {
+        onError({
+          type: 'general',
+          message: "An unexpected error occurred during classification.",
+          suggestion: "Please try again."
+        });
+      }
       setCurrentStep('capture');
     } finally {
       setIsProcessing(false);
