@@ -2,6 +2,7 @@ import { Smartphone, Scan, ArrowRight } from "lucide-react";
 import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
 import { ScanHistory } from "@/components/ScanHistory";
+import { ConfidenceDisplay } from "@/components/ConfidenceDisplay";
 import { Component as ArtificialHero } from "@/components/ui/artificial-hero";
 import LaserFlow from "@/components/LaserFlow";
 import PixelBlast from "@/components/PixelBlast";
@@ -21,8 +22,14 @@ interface Medicine {
   confidence?: number;
 }
 
+interface PredictionResult {
+  name: string;
+  confidence: number;
+}
+
 const Index = () => {
   const [scannedMedicine, setScannedMedicine] = useState<Medicine | null>(null);
+  const [scanHistoryRefresh, setScanHistoryRefresh] = useState(0);
   // const [medicineSuggestions, setMedicineSuggestions] = useState<Medicine[]>([]);
   // const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
 
@@ -31,6 +38,15 @@ const Index = () => {
     // Clear suggestions when a medicine is directly selected
     // setMedicineSuggestions([]);
     // setClassifiedType(null);
+  };
+
+  const handleScanSaved = () => {
+    // Trigger scan history refresh after scan is saved to database
+    setScanHistoryRefresh(prev => prev + 1);
+  };
+
+  const handleScanReset = () => {
+    setScannedMedicine(null);
   };
 
   /*
@@ -133,6 +149,8 @@ const Index = () => {
               <div className="space-y-4 sm:space-y-6">
                 <CameraScanner 
                   onScanComplete={handleScanComplete}
+                  onScanSaved={handleScanSaved}
+                  onScanReset={handleScanReset}
                   // onSuggestionsReady={handleSuggestionsReady}
                 />
               </div>
@@ -145,7 +163,7 @@ const Index = () => {
             
             {/* Scan History */}
             <div className="mt-8 sm:mt-12 max-w-4xl mx-auto">
-              <ScanHistory />
+              <ScanHistory refreshTrigger={scanHistoryRefresh} />
             </div>
           </div>
 

@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { exportToCSV, exportToJSON, exportToExcel } from "@/utils/exportUtils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { ChatBot } from "@/components/ChatBot";
 
 interface Medicine {
   id: number;
@@ -184,6 +185,13 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             ))}
           </ul>
         </div>
+
+        {/* AI Chatbot Section */}
+        {medicine.name !== 'Not a medicine' && (
+          <div className="pt-4 border-t">
+            <ChatBot medicine={medicine} />
+          </div>
+        )}
       </div>
     </Card>
   );
