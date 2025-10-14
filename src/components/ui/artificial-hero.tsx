@@ -424,9 +424,9 @@ export const Component = () => {
           opacity: 0.8,
           maxWidth: '150px'
         }}>
-          In the dark<br />
-          is where<br />
-          light takes form<br />
+          WHERE MEDICINE<br />
+          MEETS<br />
+          INTELLIGENCE<br />
           <br />
         </div>
       </div>
@@ -476,7 +476,7 @@ export const Component = () => {
           textTransform: 'uppercase',
           opacity: 0.7
         }}>
-          Art & Design by @angelocajegas
+        
         </div>
       </div>
 
