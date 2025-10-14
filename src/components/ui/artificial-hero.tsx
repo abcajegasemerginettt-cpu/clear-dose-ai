@@ -347,9 +347,9 @@ export const Component = () => {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%', background: '#000', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
+    <div ref={containerRef} style={{ width: '100%', height: '100%', background: 'linear-gradient(to bottom right, #1a1a2e, #0f0f1e, #16213e)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1 }}>
       {/* Canvas Container */}
-      <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh' }}>
+      <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh', zIndex: 2 }}>
         <canvas
           ref={canvasRef}
           style={{
@@ -358,7 +358,8 @@ export const Component = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            background: '#000'
+            background: 'transparent',
+            zIndex: 3
           }}
         />
         {/* Film Grain Overlay Canvas */}
@@ -372,7 +373,8 @@ export const Component = () => {
             height: '100%',
             pointerEvents: 'none',
             mixBlendMode: 'overlay',
-            opacity: 0.6
+            opacity: 0.75,
+            zIndex: 4
           }}
         />
       </div>
@@ -383,7 +385,7 @@ export const Component = () => {
         bottom: '15%',
         left: 0,
         right: 0,
-        zIndex: 50,
+        zIndex: 100,
         transform: `translateY(${scrollProgressRef.current * 100}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 1.5),
         transition: 'transform 0.1s ease-out',
@@ -397,8 +399,9 @@ export const Component = () => {
           textAlign: 'center',
           lineHeight: 0.8,
           letterSpacing: '-0.02em',
-          textShadow: '0 0 50px rgba(255, 255, 255, 0.3)',
-          filter: 'contrast(1.2)'
+          textShadow: '0 0 80px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(0, 0, 0, 0.5)',
+          filter: 'contrast(1.3) brightness(1.1)',
+          WebkitTextStroke: '1px rgba(255, 255, 255, 0.3)'
         }}>
           MEDLENS.AI
         </div>
@@ -409,7 +412,7 @@ export const Component = () => {
         position: 'fixed',
         left: '2rem',
         top: '40%',
-        zIndex: 50,
+        zIndex: 100,
         transform: `translateX(${-scrollProgressRef.current * 200}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 2),
         transition: 'transform 0.1s ease-out'
@@ -421,8 +424,10 @@ export const Component = () => {
           lineHeight: 1.4,
           letterSpacing: '0.5px',
           textTransform: 'uppercase',
-          opacity: 0.8,
-          maxWidth: '150px'
+          opacity: 0.95,
+          maxWidth: '150px',
+          textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 2px 10px rgba(0, 0, 0, 0.5)',
+          fontWeight: '600'
         }}>
           WHERE MEDICINE<br />
           MEETS<br />
@@ -436,7 +441,7 @@ export const Component = () => {
         position: 'fixed',
         right: '2rem',
         top: '40%',
-        zIndex: 50,
+        zIndex: 100,
         transform: `translateX(${scrollProgressRef.current * 200}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 2),
         transition: 'transform 0.1s ease-out'
@@ -448,9 +453,11 @@ export const Component = () => {
           lineHeight: 1.4,
           letterSpacing: '0.5px',
           textTransform: 'uppercase',
-          opacity: 0.8,
+          opacity: 0.95,
           maxWidth: '150px',
-          textAlign: 'right'
+          textAlign: 'right',
+          textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 2px 10px rgba(0, 0, 0, 0.5)',
+          fontWeight: '600'
         }}>
           IN EVERY DETAIL<br/>
           WE FIND<br/>
@@ -463,7 +470,7 @@ export const Component = () => {
         position: 'fixed',
         bottom: '8%',
         left: '2rem',
-        zIndex: 50,
+        zIndex: 100,
         transform: `translateY(${scrollProgressRef.current * 50}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 1.5),
         transition: 'transform 0.1s ease-out'
@@ -474,7 +481,8 @@ export const Component = () => {
           color: 'white',
           letterSpacing: '1px',
           textTransform: 'uppercase',
-          opacity: 0.7
+          opacity: 0.9,
+          textShadow: '0 0 15px rgba(255, 255, 255, 0.5)'
         }}>
         
         </div>

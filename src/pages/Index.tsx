@@ -82,7 +82,7 @@ const Index = () => {
           {/* Overlay button to enter scanner */}
           <button 
             onClick={() => setShowScanner(true)}
-            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[200] bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-sm sm:text-base px-8 py-6 h-auto rounded-full group transition-all flex items-center"
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[300] bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:border-white/40 text-sm sm:text-base px-8 py-6 h-auto rounded-full group transition-all flex items-center shadow-lg hover:shadow-xl"
           >
             Start Scanning
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
