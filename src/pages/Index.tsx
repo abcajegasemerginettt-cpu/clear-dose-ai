@@ -4,6 +4,7 @@ import { MedicineInfo } from "@/components/MedicineInfo";
 import { ScanHistory } from "@/components/ScanHistory";
 import { ConfidenceDisplay } from "@/components/ConfidenceDisplay";
 import { Component as ArtificialHero } from "@/components/ui/artificial-hero";
+import LiquidEther from "@/components/LiquidEther";
 import LaserFlow from "@/components/LaserFlow";
 import PixelBlast from "@/components/PixelBlast";
 import { Button } from "@/components/ui/button";
@@ -78,7 +79,35 @@ const Index = () => {
       {!showScanner ? (
         /* Landing Page with Artificial Hero */
         <div className="fixed inset-0" style={{ height: '100vh', width: '100vw' }}>
-          <ArtificialHero />
+          {/* LiquidEther Background Layer */}
+          <div className="absolute inset-0 z-0">
+            <LiquidEther
+              colors={['#5227FF', '#FF9FFC', '#B19EEF']}
+              mouseForce={20}
+              cursorSize={100}
+              isViscous={false}
+              viscous={30}
+              iterationsViscous={32}
+              iterationsPoisson={32}
+              resolution={0.5}
+              isBounce={false}
+              autoDemo={true}
+              autoSpeed={0.5}
+              autoIntensity={2.2}
+              takeoverDuration={0.25}
+              autoResumeDelay={3000}
+              autoRampDuration={0.6}
+              style={{ width: '100%', height: '100%' }}
+            />
+            {/* Dark gradient overlay for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60 pointer-events-none" />
+          </div>
+          
+          {/* ArtificialHero Foreground Layer */}
+          <div className="absolute inset-0 z-10">
+            <ArtificialHero />
+          </div>
+          
           {/* Overlay button to enter scanner */}
           <button 
             onClick={() => setShowScanner(true)}

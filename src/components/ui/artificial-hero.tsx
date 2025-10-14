@@ -218,8 +218,8 @@ export const Component = () => {
       const width = canvas.width = grainCanvas.width = window.innerWidth;
       const height = canvas.height = grainCanvas.height = window.innerHeight;
       
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0, 0, width, height);
+      // Clear canvas with transparency
+      ctx.clearRect(0, 0, width, height);
       
       const centerX = width / 2;
       const centerY = height / 2;
@@ -235,7 +235,7 @@ export const Component = () => {
       bgGradient.addColorStop(0, `hsla(${hue + 40}, 80%, 60%, 0.4)`);
       bgGradient.addColorStop(0.3, `hsla(${hue}, 60%, 40%, 0.3)`);
       bgGradient.addColorStop(0.6, `hsla(${hue - 20}, 40%, 20%, 0.2)`);
-      bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0.9)');
+      bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
       
       ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, width, height);
@@ -347,10 +347,10 @@ export const Component = () => {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%', background: '#000', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
+    <div ref={containerRef} style={{ width: '100%', height: '100%', background: 'transparent', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
       {/* Canvas Container */}
       <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh' }}>
-        <canvas
+        <canvas 
           ref={canvasRef}
           style={{
             position: 'absolute',
@@ -358,7 +358,7 @@ export const Component = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            background: '#000'
+            background: 'transparent'
           }}
         />
         {/* Film Grain Overlay Canvas */}
