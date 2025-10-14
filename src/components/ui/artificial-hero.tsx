@@ -452,9 +452,9 @@ export const Component = () => {
           maxWidth: '150px',
           textAlign: 'right'
         }}>
-          In emptiness<br/>
-          we find<br/>
-          true happiness
+          IN EVERY DETAIL<br/>
+          WE FIND<br/>
+          THE CURE WITHIN
         </div>
       </div>
 
