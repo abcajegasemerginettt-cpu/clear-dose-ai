@@ -224,16 +224,13 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
       const confidence = Math.round(topPrediction.probability * 100);
       const medicineName = topPrediction.className;
 
-      // Send confidence data for display only if it's not "Not a medicine"
-      if (onConfidenceData && medicineName.toLowerCase() !== 'not a medicine') {
+      // Send confidence data for display
+      if (onConfidenceData) {
         const confidenceResults: PredictionResult[] = top3Predictions.map(pred => ({
           name: pred.className,
           confidence: Math.round(pred.probability * 100)
         }));
         onConfidenceData(confidenceResults);
-      } else if (onConfidenceData) {
-        // Clear confidence data if it's not a medicine
-        onConfidenceData([]);
       }
 
       const foundMedicine = medicinesData.find(
