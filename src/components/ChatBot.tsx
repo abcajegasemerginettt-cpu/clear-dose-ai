@@ -149,7 +149,6 @@ export const ChatBot = ({ medicine }: ChatBotProps) => {
       
       await navigator.clipboard.writeText(plainText);
       setCopiedMessageId(messageId);
-      toast.success('Message copied to clipboard');
       
       // Reset copy state after 2 seconds
       setTimeout(() => {

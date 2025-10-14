@@ -1,102 +1,54 @@
-💊 Welcome to Your MedLens AI Project
-📘 Project Info
+# 💊 MedLens AI
 
-Project Name: MedLens AI
-Description: An AI-powered web application that identifies tablets and capsules through live camera scanning, using a TensorFlow-trained model and Supabase as the backend for medicine data management.
+An AI-powered web application that identifies tablets and capsules through live camera scanning, using machine learning models and Supabase for medicine data management.
 
-🧠 How to Edit This Code
+## 🚀 Quick Start
 
-There are several ways you can edit and develop your application.
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
 
-Option 1: Work Locally Using Your IDE
+### Installation
 
-If you prefer using your own development environment (such as VS Code or WebStorm), follow these steps:
+1. **Clone the repository**
+   ```bash
+   git clone <YOUR_GIT_URL>
+   cd clear-dose-ai
+   ```
 
-🪄 Steps
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   ⚠️ **Important**: Contact the developer to get the required API keys and environment variables. The `.env` file contains sensitive information and is not included in the repository for security reasons.
 
-# Step 3: Install the necessary dependencies.
-npm i
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
 
-# Step 4: Start the development server with auto-reloading and instant preview.
-npm run dev
+5. **Open your browser**
+   Visit `http://localhost:5173` to view the application.
 
+## ⚙️ Tech Stack
 
-Once the server is running, open your browser and visit http://localhost:5173 (or the port displayed in your terminal) to preview your project live.
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, Radix UI, shadcn/ui
+- **AI/ML**: TensorFlow.js, Teachable Machine, Google Gemini
+- **Backend**: Supabase (Database, Auth, Storage)
+- **Routing**: React Router DOM
+- **State Management**: React Query, React Hook Form
 
-Option 2: Edit Files Directly on GitHub
+## 📞 Support
 
-Navigate to the desired file(s) in your repository.
+For environment variables, API keys, or technical support, please contact the developer.
 
-Click the Edit (pencil icon) on the top right of the file view.
+## 📄 License
 
-Make your changes and commit directly to your main branch.
-
-Option 3: Use GitHub Codespaces
-
-Go to your repository’s main page on GitHub.
-
-Click on the Code (green) button near the top right.
-
-Select the Codespaces tab.
-
-Click New codespace to launch a cloud-based development environment.
-
-Edit and test your code directly in the browser, then commit and push changes when ready.
-
-⚙️ Technologies Used in This Project
-
-This project is built using the following technologies:
-
-Technology	Purpose
-Vite	Frontend build tool for fast development
-TypeScript	Type-safe JavaScript for scalability
-React	Component-based UI framework
-shadcn-ui	Prebuilt UI components for modern interfaces
-Tailwind CSS	Utility-first CSS framework for styling
-TensorFlow / TensorFlow.js	AI model training and browser-based prediction
-Supabase	Backend database and API for medicine data management
-🚀 How to Deploy This Project
-
-You can deploy your MedLens AI web app to your preferred hosting platform such as:
-
-Vercel
-
-Netlify
-
-Render
-
-GitHub Pages
-
-Deployment Steps (Example: Vercel)
-
-Go to vercel.com
- and sign in with GitHub.
-
-Click “New Project” and import your repository.
-
-Configure build settings:
-
-Build Command: npm run build
-
-Output Directory: dist
-
-Click Deploy.
-
-Once deployed, your site will be live at https://your-app-name.vercel.app.
-
-🌐 Connecting a Custom Domain
-
-If you want your app to have a custom domain (e.g., medlensai.com):
-
-Go to your hosting provider’s Domain Settings.
-
-Click Connect Domain.
-
-Add your domain name and update your DNS records as instructed.
-
-Wait for DNS propagation (usually a few minutes).
+This project is private and proprietary.
