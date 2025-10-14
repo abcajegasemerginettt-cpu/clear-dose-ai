@@ -30,6 +30,7 @@ interface PredictionResult {
 const Index = () => {
   const [scannedMedicine, setScannedMedicine] = useState<Medicine | null>(null);
   const [scanHistoryRefresh, setScanHistoryRefresh] = useState(0);
+  const [confidenceData, setConfidenceData] = useState<PredictionResult[]>([]);
   // const [medicineSuggestions, setMedicineSuggestions] = useState<Medicine[]>([]);
   // const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
 
@@ -45,8 +46,13 @@ const Index = () => {
     setScanHistoryRefresh(prev => prev + 1);
   };
 
+  const handleConfidenceData = (predictions: PredictionResult[]) => {
+    setConfidenceData(predictions);
+  };
+
   const handleScanReset = () => {
     setScannedMedicine(null);
+    setConfidenceData([]);
   };
 
   /*
