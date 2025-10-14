@@ -111,9 +111,9 @@ export const Component = () => {
         centerX, centerY, radius * 1.5
       );
       
-      orbGradient.addColorStop(0, `hsla(${hue + 10}, 100%, 98%, 1.0)`);
-      orbGradient.addColorStop(0.2, `hsla(${hue + 20}, 95%, 85%, 0.85)`);
-      orbGradient.addColorStop(0.5, `hsla(${hue}, 75%, 60%, 0.5)`);
+      orbGradient.addColorStop(0, `hsla(${hue + 10}, 100%, 95%, 0.9)`);
+      orbGradient.addColorStop(0.2, `hsla(${hue + 20}, 90%, 80%, 0.7)`);
+      orbGradient.addColorStop(0.5, `hsla(${hue}, 70%, 50%, 0.4)`);
       orbGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       
       ctx.fillStyle = orbGradient;
@@ -121,7 +121,7 @@ export const Component = () => {
       
       // Bright center circle with glitch
       const centerRadius = radius * 0.3;
-      ctx.fillStyle = `hsla(${hue + 20}, 100%, 98%, 0.95)`;
+      ctx.fillStyle = `hsla(${hue + 20}, 100%, 95%, 0.8)`;
       ctx.beginPath();
       ctx.arc(centerX, centerY, centerRadius, 0, Math.PI * 2);
       ctx.fill();
@@ -170,8 +170,8 @@ export const Component = () => {
       }
       
       // Outer ring with glitch distortion
-      ctx.strokeStyle = `hsla(${hue + 20}, 85%, 75%, 0.75)`;
-      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = `hsla(${hue + 20}, 80%, 70%, 0.6)`;
+      ctx.lineWidth = 2;
       
       if (shouldGlitch) {
         // Distorted ring segments
@@ -218,8 +218,8 @@ export const Component = () => {
       const width = canvas.width = grainCanvas.width = window.innerWidth;
       const height = canvas.height = grainCanvas.height = window.innerHeight;
       
-      // Clear canvas with transparency
-      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
       
       const centerX = width / 2;
       const centerY = height / 2;
@@ -232,10 +232,10 @@ export const Component = () => {
       );
       
       const hue = 180 + params.atmosphereShift * 60;
-      bgGradient.addColorStop(0, `hsla(${hue + 40}, 85%, 65%, 0.5)`);
-      bgGradient.addColorStop(0.3, `hsla(${hue}, 65%, 45%, 0.4)`);
-      bgGradient.addColorStop(0.6, `hsla(${hue - 20}, 45%, 25%, 0.25)`);
-      bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
+      bgGradient.addColorStop(0, `hsla(${hue + 40}, 80%, 60%, 0.4)`);
+      bgGradient.addColorStop(0.3, `hsla(${hue}, 60%, 40%, 0.3)`);
+      bgGradient.addColorStop(0.6, `hsla(${hue - 20}, 40%, 20%, 0.2)`);
+      bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0.9)');
       
       ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, width, height);
@@ -347,10 +347,10 @@ export const Component = () => {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%', background: 'transparent', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 20 }}>
+    <div ref={containerRef} style={{ width: '100%', height: '100%', background: '#000', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
       {/* Canvas Container */}
-      <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh', zIndex: 21 }}>
-        <canvas 
+      <div style={{ position: 'sticky', top: 0, width: '100%', height: '100vh' }}>
+        <canvas
           ref={canvasRef}
           style={{
             position: 'absolute',
@@ -358,8 +358,7 @@ export const Component = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'transparent',
-            zIndex: 22
+            background: '#000'
           }}
         />
         {/* Film Grain Overlay Canvas */}
@@ -373,8 +372,7 @@ export const Component = () => {
             height: '100%',
             pointerEvents: 'none',
             mixBlendMode: 'overlay',
-            opacity: 0.75,
-            zIndex: 23
+            opacity: 0.6
           }}
         />
       </div>
@@ -385,7 +383,7 @@ export const Component = () => {
         bottom: '15%',
         left: 0,
         right: 0,
-        zIndex: 100,
+        zIndex: 50,
         transform: `translateY(${scrollProgressRef.current * 100}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 1.5),
         transition: 'transform 0.1s ease-out',
@@ -399,9 +397,8 @@ export const Component = () => {
           textAlign: 'center',
           lineHeight: 0.8,
           letterSpacing: '-0.02em',
-          textShadow: '0 0 80px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6), 0 4px 20px rgba(0, 0, 0, 0.5)',
-          filter: 'contrast(1.3) brightness(1.1)',
-          WebkitTextStroke: '1px rgba(255, 255, 255, 0.3)'
+          textShadow: '0 0 50px rgba(255, 255, 255, 0.3)',
+          filter: 'contrast(1.2)'
         }}>
           MEDLENS.AI
         </div>
@@ -412,7 +409,7 @@ export const Component = () => {
         position: 'fixed',
         left: '2rem',
         top: '40%',
-        zIndex: 100,
+        zIndex: 50,
         transform: `translateX(${-scrollProgressRef.current * 200}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 2),
         transition: 'transform 0.1s ease-out'
@@ -424,10 +421,8 @@ export const Component = () => {
           lineHeight: 1.4,
           letterSpacing: '0.5px',
           textTransform: 'uppercase',
-          opacity: 0.95,
-          maxWidth: '150px',
-          textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 2px 10px rgba(0, 0, 0, 0.5)',
-          fontWeight: '600'
+          opacity: 0.8,
+          maxWidth: '150px'
         }}>
           WHERE MEDICINE<br />
           MEETS<br />
@@ -441,7 +436,7 @@ export const Component = () => {
         position: 'fixed',
         right: '2rem',
         top: '40%',
-        zIndex: 100,
+        zIndex: 50,
         transform: `translateX(${scrollProgressRef.current * 200}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 2),
         transition: 'transform 0.1s ease-out'
@@ -453,11 +448,9 @@ export const Component = () => {
           lineHeight: 1.4,
           letterSpacing: '0.5px',
           textTransform: 'uppercase',
-          opacity: 0.95,
+          opacity: 0.8,
           maxWidth: '150px',
-          textAlign: 'right',
-          textShadow: '0 0 20px rgba(255, 255, 255, 0.6), 0 2px 10px rgba(0, 0, 0, 0.5)',
-          fontWeight: '600'
+          textAlign: 'right'
         }}>
           IN EVERY DETAIL<br/>
           WE FIND<br/>
@@ -470,7 +463,7 @@ export const Component = () => {
         position: 'fixed',
         bottom: '8%',
         left: '2rem',
-        zIndex: 100,
+        zIndex: 50,
         transform: `translateY(${scrollProgressRef.current * 50}px)`,
         opacity: Math.max(0, 1 - scrollProgressRef.current * 1.5),
         transition: 'transform 0.1s ease-out'
@@ -481,8 +474,7 @@ export const Component = () => {
           color: 'white',
           letterSpacing: '1px',
           textTransform: 'uppercase',
-          opacity: 0.9,
-          textShadow: '0 0 15px rgba(255, 255, 255, 0.5)'
+          opacity: 0.7
         }}>
         
         </div>

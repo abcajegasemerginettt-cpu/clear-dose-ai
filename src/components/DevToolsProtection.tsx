@@ -2,6 +2,12 @@ import { useEffect } from 'react';
 
 export const DevToolsProtection = () => {
   useEffect(() => {
+    // Disable right-click context menu
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      return false;
+    };
+
     // Detect DevTools
     const detectDevTools = () => {
       const threshold = 160;
@@ -14,7 +20,7 @@ export const DevToolsProtection = () => {
       }
     };
 
-    // Disable keyboard shortcuts for DevTools (Windows/Linux only)
+    // Disable keyboard shortcuts for DevTools
     const handleKeyDown = (e: KeyboardEvent) => {
       // Disable F12
       if (e.key === 'F12') {
@@ -46,19 +52,46 @@ export const DevToolsProtection = () => {
         return false;
       }
 
-      // Mac shortcuts are now ENABLED (removed blocking)
-      // Users can use Cmd+Option+I, Cmd+Option+J, Cmd+Option+C
+      // Disable Cmd+Option+I (Mac)
+      if (e.metaKey && e.altKey && e.key === 'i') {
+        e.preventDefault();
+        return false;
+      }
+
+      // Disable Cmd+Option+J (Mac)
+      if (e.metaKey && e.altKey && e.key === 'j') {
+        e.preventDefault();
+        return false;
+      }
+
+      // Disable Cmd+Option+C (Mac)
+      if (e.metaKey && e.altKey && e.key === 'c') {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    // Disable text selection and copy
+    const disableSelection = (e: Event) => {
+      e.preventDefault();
+      return false;
     };
 
     // Add event listeners
+    document.addEventListener('contextmenu', handleContextMenu);
     document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('selectstart', disableSelection);
+    document.addEventListener('copy', disableSelection);
 
     // Check for DevTools periodically
     const devToolsInterval = setInterval(detectDevTools, 1000);
 
     // Cleanup
     return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('selectstart', disableSelection);
+      document.removeEventListener('copy', disableSelection);
       clearInterval(devToolsInterval);
     };
   }, []);
