@@ -157,8 +157,14 @@ const Index = () => {
                   onScanComplete={handleScanComplete}
                   onScanSaved={handleScanSaved}
                   onScanReset={handleScanReset}
+                  onConfidenceData={handleConfidenceData}
                   // onSuggestionsReady={handleSuggestionsReady}
                 />
+                
+                {/* Confidence Display - Only show when there's scanned medicine */}
+                {scannedMedicine && confidenceData.length > 0 && (
+                  <ConfidenceDisplay predictions={confidenceData} />
+                )}
               </div>
               
               {/* Medicine Info */}
