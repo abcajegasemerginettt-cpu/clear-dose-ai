@@ -128,10 +128,10 @@ const Index = () => {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white drop-shadow-2xl">
                   MedLens AI
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 max-w-3xl mx-auto drop-shadow-lg px-4">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto drop-shadow-lg px-4">
                   Identify tablets and capsules using AI technology
                 </p>
-                <p className="text-xs sm:text-sm text-white/60 max-w-2xl mx-auto px-4">
+                <p className="text-xs sm:text-sm text-white max-w-2xl mx-auto px-4">
                   Currently supports 25+ common medicines • Beta version
                 </p>
               </div>
@@ -185,10 +185,10 @@ const Index = () => {
                   <Smartphone className="h-4 sm:h-5 w-4 sm:w-5 text-white" />
                   <span className="font-semibold text-white text-sm sm:text-base">MedLens AI</span>
                 </div>
-                <p className="text-xs sm:text-sm text-white/70">
+                <p className="text-xs sm:text-sm text-white">
                   © 2025 MedLens AI. All rights reserved.
                 </p>
-                <p className="text-xs text-white/50 max-w-2xl mx-auto px-4">
+                <p className="text-xs text-white max-w-2xl mx-auto px-4">
                   <strong>Disclaimer:</strong> This app is for informational purposes only. 
                   Always consult healthcare professionals for medical advice.
                 </p>

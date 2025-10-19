@@ -145,7 +145,7 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
         {/* Title and Description */}
         <div className="space-y-2">
           <h3 className="text-lg font-semibold">{getTitle()}</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-white">
             {getDescription()}
           </p>
         </div>
@@ -153,7 +153,7 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
         {/* Suggestions */}
         <div className="text-left space-y-2">
           <h4 className="text-sm font-medium">💡 Suggestions:</h4>
-          <ul className="text-xs text-muted-foreground space-y-1">
+          <ul className="text-xs text-white space-y-1">
             {getSuggestions().map((suggestion, index) => (
               <li key={index}>• {suggestion}</li>
             ))}
@@ -190,7 +190,7 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
               
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground">
+                  <label className="text-xs font-medium text-white">
                     Medicine Name *
                   </label>
                   <Input
@@ -202,7 +202,7 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
                 </div>
                 
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground">
+                  <label className="text-xs font-medium text-white">
                     Additional Information (Optional)
                   </label>
                   <Textarea
