@@ -1,8 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, MessageSquare } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { AlertTriangle, RotateCcw, MessageSquare, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import emailjs from '@emailjs/browser';
 
 interface UnknownMedicineCardProps {
   error: {
@@ -17,12 +21,60 @@ interface UnknownMedicineCardProps {
 
 export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps) => {
   const [feedbackSent, setFeedbackSent] = useState(false);
+  const [showRequestForm, setShowRequestForm] = useState(false);
+  const [medicineName, setMedicineName] = useState('');
+  const [userMessage, setUserMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSendFeedback = () => {
-    // In a real app, this would send feedback to your backend
-    // For now, we'll just show a success message
-    setFeedbackSent(true);
-    toast.success("Thank you! Your feedback helps us improve our medicine database.");
+  const handleSendFeedback = async () => {
+    if (!medicineName.trim()) {
+      toast.error("Please enter the medicine name.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // EmailJS Configuration - Replace with your actual keys
+      const emailjsConfig = {
+        serviceId: 'service_l3gpipl', // Replace with your Gmail service ID
+        templateId: 'template_vdqo4yn', // Replace with your template ID  
+        publicKey: '_Ouucfc8b2QR8VZiX' // Replace with your public key
+      };
+
+      // Send email via EmailJS
+      const emailParams = {
+        medicine_name: medicineName,
+        error_type: error.type === 'not_found' ? 'Medicine Not in Database' : 'Low Confidence Detection',
+        confidence: error.confidence || 0,
+        timestamp: new Date().toLocaleString(),
+        user_message: userMessage || 'No additional message provided'
+      };
+
+      await emailjs.send(
+        emailjsConfig.serviceId,
+        emailjsConfig.templateId,
+        emailParams,
+        emailjsConfig.publicKey
+      );
+
+      // Also store in database for backup
+      await supabase.from('scan_history').insert({
+        medicine_name: `FEEDBACK: ${medicineName}`,
+        confidence: error.confidence || 0,
+        scanned_image_url: null,
+      });
+
+      setFeedbackSent(true);
+      setShowRequestForm(false);
+      toast.success("Medicine request sent successfully! We'll review it soon.");
+      
+    } catch (error) {
+      console.error('Error sending feedback:', error);
+      toast.error("Failed to send request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getErrorIcon = () => {
@@ -41,7 +93,7 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
       case 'not_found':
         return "Medicine Not Found";
       case 'low_confidence':
-        return "Low Confidence Detection";
+        return "Medicine Not Found";
       default:
         return "Scan Error";
     }
@@ -52,7 +104,7 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
       case 'not_found':
         return `We couldn't find "${error.medicineName}" in our current database of 25+ medicines. This medicine might not be supported yet.`;
       case 'low_confidence':
-        return `We detected "${error.medicineName}" but with low confidence (${error.confidence}%). We require at least 70% confidence for accurate identification.`;
+        return `This medicine is not currently supported by our AI model. We need to train our system to recognize this specific medicine for accurate identification.`;
       default:
         return error.message;
     }
@@ -69,11 +121,9 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
         ];
       case 'low_confidence':
         return [
-          "Improve lighting - avoid shadows and reflections",
-          "Scan individual tablets/capsules, not bottles",
-          "Keep the camera steady and in focus",
-          "Try a cleaner background (white paper works well)",
-          "Ensure the medicine fills most of the frame"
+          "This medicine needs to be added to our training model",
+          "Try scanning a different medicine",
+          "Request us to train this medicine in our AI model"
         ];
       default:
         return [
@@ -120,9 +170,9 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
             Try Again
           </Button>
 
-          {error.type === 'not_found' && !feedbackSent && (
+          {!feedbackSent && !showRequestForm && (
             <Button 
-              onClick={handleSendFeedback}
+              onClick={() => setShowRequestForm(true)}
               variant="outline"
               size="sm"
             >
@@ -131,10 +181,64 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
             </Button>
           )}
 
+          {/* Medicine Request Form */}
+          {showRequestForm && !feedbackSent && (
+            <div className="mt-4 p-4 border rounded-lg bg-gray-50 dark:bg-gray-900">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-medium">Request Medicine</h4>
+                <Button
+                  onClick={() => setShowRequestForm(false)}
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground">
+                    Medicine Name *
+                  </label>
+                  <Input
+                    placeholder="Enter the exact medicine name"
+                    value={medicineName}
+                    onChange={(e) => setMedicineName(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground">
+                    Additional Information (Optional)
+                  </label>
+                  <Textarea
+                    placeholder="Any additional details about this medicine..."
+                    value={userMessage}
+                    onChange={(e) => setUserMessage(e.target.value)}
+                    className="mt-1 h-20"
+                  />
+                </div>
+                
+                <Button
+                  onClick={handleSendFeedback}
+                  disabled={isSubmitting || !medicineName.trim()}
+                  className="w-full"
+                  size="sm"
+                >
+                  {isSubmitting ? "Sending..." : "Send Request"}
+                </Button>
+              </div>
+            </div>
+          )}
+
           {feedbackSent && (
-            <p className="text-xs text-green-600 mt-2">
-              ✓ Feedback sent! We'll consider adding this medicine.
-            </p>
+            <div className="mt-3 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
+              <p className="text-xs text-green-700 dark:text-green-300">
+                ✓ Medicine request sent successfully! We'll review and consider adding it to our database.
+              </p>
+            </div>
           )}
         </div>
 
