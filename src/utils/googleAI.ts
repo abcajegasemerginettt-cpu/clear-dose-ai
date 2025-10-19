@@ -58,17 +58,30 @@ class GoogleAIService {
         4. If they ask about dosage, focus only on dosage information
         5. Use bullet points for lists when appropriate
         6. Keep responses helpful but brief - around 3-5 sentences or a short bulleted list
-        7. Always include a brief reminder to consult healthcare professionals
-        8. Use your medical knowledge to enhance the answer but stay focused on the specific question
+        7. Only include a healthcare professional disclaimer when discussing dosage, drug interactions, contraindications, or serious medical advice
+        8. For general informational questions (like "what is this medicine for?"), skip the disclaimer
+        9. Use your medical knowledge to enhance the answer but stay focused on the specific question
         
-        Remember: Answer only what they asked, be concise, and provide focused medical information.
+        Remember: Answer only what they asked, be concise, and only add disclaimers for medical advice that requires professional consultation.
       `;
 
-      const result = await this.model.generateContent(prompt);
+      // Add timeout to prevent hanging requests
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout after 30 seconds')), 30000)
+      );
+
+      const result = await Promise.race([
+        this.model.generateContent(prompt),
+        timeoutPromise
+      ]);
+      
       const response = await result.response;
       return response.text();
     } catch (error) {
       console.error('Error calling Google AI:', error);
+      if (error.message?.includes('timeout')) {
+        throw new Error('AI response is taking too long. Please try again with a shorter question.');
+      }
       throw new Error('Failed to get response from AI assistant. Please try again.');
     }
   }

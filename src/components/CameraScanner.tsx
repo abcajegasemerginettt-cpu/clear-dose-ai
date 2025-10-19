@@ -1,4 +1,4 @@
-import { Camera, Scan, Upload, ArrowLeft, Check, RotateCcw } from "lucide-react";
+import { Camera, Scan, Upload, ArrowLeft, Check, RotateCcw, X, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +28,7 @@ interface CameraScannerProps {
   }) => void;
 }
 
-type WorkflowStep = 'capture' | 'classify' | 'result';
+type WorkflowStep = 'capture' | 'classify' | 'result' | 'error';
 
 interface Medicine {
   id: number;
@@ -54,6 +54,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
   const [suggestedMedicines, setSuggestedMedicines] = useState<Medicine[]>([]);
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
   const [scanResult, setScanResult] = useState<Medicine | null>(null);
+  const [showScanningTips, setShowScanningTips] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -233,6 +234,21 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
         onConfidenceData(confidenceResults);
       }
 
+      // Check confidence threshold - if below 70%, treat as unknown medicine
+      if (confidence < 70) {
+        if (onError) {
+          onError({
+            type: 'low_confidence',
+            message: `Low confidence detection: "${medicineName}" (${confidence}%)`,
+            suggestion: "The image quality may need improvement. Try better lighting, clearer focus, or a different angle.",
+            confidence: confidence,
+            medicineName: medicineName
+          });
+        }
+        setCurrentStep('error');
+        return;
+      }
+
       const foundMedicine = medicinesData.find(
         med => med.name.toLowerCase() === medicineName.toLowerCase()
       );
@@ -241,13 +257,13 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
         if (onError) {
           onError({
             type: 'not_found',
-            message: `The item classified as "${medicineName}" is not a recognized medicine.`,
-            suggestion: "Please try a different item.",
+            message: `We couldn't find this medicine in our current database of 25+ supported medicines.`,
+            suggestion: "This medicine may not be supported yet. Please try a different medicine or send us feedback to add it to our database.",
             confidence: confidence,
             medicineName: medicineName
           });
         }
-        setCurrentStep('capture');
+        setCurrentStep('error');
         return;
       }
 
@@ -369,6 +385,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
     setScanResult(null);
     setError(null);
     setIsProcessing(false);
+    setShowScanningTips(true); // Reset scanning tips to show again
     
     // Clear confidence data
     if (onConfidenceData) {
@@ -401,6 +418,31 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
               <Scan className="h-24 w-24 text-primary/30 scan-pulse" />
             </div>
           </div>
+          
+          {/* Scanning Tips Overlay */}
+          {showScanningTips && (
+            <div className="absolute top-4 left-4 right-4 pointer-events-auto">
+              <div className="glass-card p-3 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-semibold text-black flex items-center gap-2">
+                    Scanning Tips
+                  </h4>
+                  <button
+                    onClick={() => setShowScanningTips(false)}
+                    className="text-black/60 hover:text-black transition-colors p-1"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <ul className="text-xs text-black/90 space-y-1">
+                  <li>• Scan individual tablets/capsules, not bottles</li>
+                  <li>• Use blister pack backs or place pill on surface</li>
+                  <li>• Center the medicine in the frame</li>
+                  <li>• Ensure good lighting (avoid shadows)</li>
+                </ul>
+              </div>
+            </div>
+          )}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
             <Button onClick={stopCamera} variant="secondary" className="glass-button">
               Stop Camera
@@ -422,7 +464,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
         <div className="text-center space-y-1 sm:space-y-2 max-w-sm mx-auto">
           <h3 className="text-base sm:text-lg md:text-xl font-semibold">Ready to Scan</h3>
           <p className="text-xs sm:text-sm text-muted-foreground px-2 leading-tight">
-            Take a photo or upload an image of your medicine for identification
+            Scan individual tablets or capsules (not bottles or containers)
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full max-w-xs sm:max-w-sm">
@@ -555,6 +597,44 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
     </div>
   );
 
+  // Step 4: Error UI (shows scanned image with error message)
+  const renderErrorStep = () => (
+    <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30">
+      {/* Centered Error Content */}
+      <div className="flex flex-col items-center justify-center h-full gap-2 sm:gap-3 p-3 sm:p-4">
+        {capturedImage && (
+          <div className="glass-card p-2 sm:p-3 rounded-lg">
+            <img 
+              src={capturedImage} 
+              alt="Scanned medicine" 
+              className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md shadow-lg" 
+            />
+          </div>
+        )}
+        
+        <div className="text-center space-y-1 sm:space-y-2 max-w-xs sm:max-w-sm mx-auto">
+          <div className="flex items-center justify-center gap-1 sm:gap-2 text-red-600">
+            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5" />
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold">Scan Complete!</h3>
+          </div>
+          
+          <p className="text-xs sm:text-sm text-muted-foreground px-1 leading-tight">
+            Medicine not found. Check error details on the right.
+          </p>
+        </div>
+        
+        <Button 
+          onClick={resetWorkflow}
+          size="sm"
+          className="medical-gradient text-white shadow-lg hover:shadow-xl transition-all mt-1 sm:mt-2 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm"
+        >
+          <RotateCcw className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+          Scan Again
+        </Button>
+      </div>
+    </div>
+  );
+
   // Render different UI based on current workflow step
   const renderStepContent = () => {
     switch (currentStep) {
@@ -564,6 +644,8 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
         return renderClassifyStep();
       case 'result':
         return renderResultStep();
+      case 'error':
+        return renderErrorStep();
       default:
         return renderCaptureStep();
     }
