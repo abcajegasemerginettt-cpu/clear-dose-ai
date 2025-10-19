@@ -162,14 +162,6 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
 
         {/* Actions */}
         <div className="flex flex-col gap-2 pt-2">
-          <Button 
-            onClick={onRetry}
-            className="medical-gradient text-white"
-          >
-            <RotateCcw className="mr-2 h-4 w-4" />
-            Try Again
-          </Button>
-
           {!feedbackSent && !showRequestForm && (
             <Button 
               onClick={() => setShowRequestForm(true)}
