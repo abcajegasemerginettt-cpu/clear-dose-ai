@@ -150,22 +150,3 @@ All colors MUST be HSL.
     transform: translateY(0);
   }
 }
-
-/* Animated gradient background */
-.animated-gradient-bg {
-  background: linear-gradient(135deg, #0a0a0f, #1a0a0f, #2a0505, #0f0a1e);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}

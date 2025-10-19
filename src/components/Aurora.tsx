@@ -109,15 +109,7 @@ void main() {
 }
 `;
 
-interface AuroraProps {
-  colorStops?: string[];
-  amplitude?: number;
-  blend?: number;
-  speed?: number;
-  time?: number;
-}
-
-export default function Aurora(props: AuroraProps) {
+export default function Aurora(props: any) {
   const { colorStops = ['#5227FF', '#7cff67', '#5227FF'], amplitude = 1.0, blend = 0.5 } = props;
   const propsRef = useRef(props);
   propsRef.current = props;
@@ -139,7 +131,7 @@ export default function Aurora(props: AuroraProps) {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.canvas.style.backgroundColor = 'transparent';
 
-    let program: Program;
+    let program: any;
 
     function resize() {
       if (!ctn) return;
@@ -157,7 +149,7 @@ export default function Aurora(props: AuroraProps) {
       delete geometry.attributes.uv;
     }
 
-    const colorStopsArray = colorStops.map(hex => {
+    const colorStopsArray = colorStops.map((hex: string) => {
       const c = new Color(hex);
       return [c.r, c.g, c.b];
     });
@@ -185,7 +177,7 @@ export default function Aurora(props: AuroraProps) {
       program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
       program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
       const stops = propsRef.current.colorStops ?? colorStops;
-      program.uniforms.uColorStops.value = stops.map(hex => {
+      program.uniforms.uColorStops.value = stops.map((hex: string) => {
         const c = new Color(hex);
         return [c.r, c.g, c.b];
       });
