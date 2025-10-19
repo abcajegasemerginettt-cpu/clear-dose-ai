@@ -112,7 +112,7 @@ const Index = () => {
         /* Scanner Interface */
         <>
           {/* Aurora Background Layer */}
-          <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" style={{ height: '100vh', width: '100vw' }}>
+          <div className="fixed inset-0 z-0" style={{ height: '100vh', width: '100vw', background: 'linear-gradient(to bottom right, #1a1a2e, #0f0f1e, #16213e)' }}>
             <Aurora
               colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
               blend={0.5}
