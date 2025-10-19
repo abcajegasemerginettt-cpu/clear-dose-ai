@@ -3,6 +3,7 @@ import { CameraScanner } from "@/components/CameraScanner";
 import { MedicineInfo } from "@/components/MedicineInfo";
 import { ScanHistory } from "@/components/ScanHistory";
 import { ConfidenceDisplay } from "@/components/ConfidenceDisplay";
+import { UnknownMedicineCard } from "@/components/UnknownMedicineCard";
 import { Component as ArtificialHero } from "@/components/ui/artificial-hero";
 import LaserFlow from "@/components/LaserFlow";
 import PixelBlast from "@/components/PixelBlast";
@@ -31,6 +32,13 @@ const Index = () => {
   const [scannedMedicine, setScannedMedicine] = useState<Medicine | null>(null);
   const [scanHistoryRefresh, setScanHistoryRefresh] = useState(0);
   const [confidenceData, setConfidenceData] = useState<PredictionResult[]>([]);
+  const [scanError, setScanError] = useState<{
+    type: 'low_confidence' | 'not_found' | 'general';
+    message: string;
+    suggestion?: string;
+    confidence?: number;
+    medicineName?: string;
+  } | null>(null);
   // const [medicineSuggestions, setMedicineSuggestions] = useState<Medicine[]>([]);
   // const [classifiedType, setClassifiedType] = useState<'tablet' | 'capsule' | null>(null);
 
@@ -50,9 +58,22 @@ const Index = () => {
     setConfidenceData(predictions);
   };
 
+  const handleScanError = (error: {
+    type: 'low_confidence' | 'not_found' | 'general';
+    message: string;
+    suggestion?: string;
+    confidence?: number;
+    medicineName?: string;
+  }) => {
+    setScanError(error);
+    setScannedMedicine(null);
+    setConfidenceData([]);
+  };
+
   const handleScanReset = () => {
     setScannedMedicine(null);
     setConfidenceData([]);
+    setScanError(null);
   };
 
   /*
@@ -142,7 +163,10 @@ const Index = () => {
                   MedLens AI
                 </h1>
                 <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 max-w-3xl mx-auto drop-shadow-lg px-4">
-                  Instantly identify medicines using advanced AI technology
+                  Identify tablets and capsules using AI technology
+                </p>
+                <p className="text-xs sm:text-sm text-white/60 max-w-2xl mx-auto px-4">
+                  Currently supports 25+ common medicines • Beta version
                 </p>
               </div>
             </div>
@@ -158,6 +182,7 @@ const Index = () => {
                   onScanSaved={handleScanSaved}
                   onScanReset={handleScanReset}
                   onConfidenceData={handleConfidenceData}
+                  onError={handleScanError}
                   // onSuggestionsReady={handleSuggestionsReady}
                 />
                 
@@ -167,9 +192,16 @@ const Index = () => {
                 )}
               </div>
               
-              {/* Medicine Info */}
+              {/* Medicine Info or Error Display */}
               <div className="space-y-4 sm:space-y-6">
+                {scanError ? (
+                  <UnknownMedicineCard 
+                    error={scanError} 
+                    onRetry={handleScanReset}
+                  />
+                ) : (
                   <MedicineInfo medicine={scannedMedicine} />
+                )}
               </div>
             </div>
             

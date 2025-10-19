@@ -22,6 +22,11 @@ export const ConfidenceDisplay = ({ predictions, className = "" }: ConfidenceDis
     .sort((a, b) => b.confidence - a.confidence)
     .slice(0, 3);
 
+  // Hide confidence comparison if top prediction is "Not a medicine"
+  if (topPredictions.length > 0 && topPredictions[0].name.toLowerCase() === "not a medicine") {
+    return null;
+  }
+
   return (
     <Card className={`glass-card p-4 sm:p-6 ${className}`}>
       <div className="flex items-center gap-2 mb-4">
