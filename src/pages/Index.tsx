@@ -5,7 +5,6 @@ import { ScanHistory } from "@/components/ScanHistory";
 import { ConfidenceDisplay } from "@/components/ConfidenceDisplay";
 import { UnknownMedicineCard } from "@/components/UnknownMedicineCard";
 import { Component as ArtificialHero } from "@/components/ui/artificial-hero";
-import Aurora from "@/components/Aurora";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -111,15 +110,14 @@ const Index = () => {
       ) : (
         /* Scanner Interface */
         <>
-          {/* Aurora Background Layer */}
-          <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" style={{ height: '100vh', width: '100vw' }}>
-            <Aurora
-              colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
-              blend={0.5}
-              amplitude={1.0}
-              speed={0.5}
-            />
-          </div>
+          {/* Animated Background Layer */}
+          <div 
+            className="fixed inset-0 z-0 animated-gradient-bg" 
+            style={{ 
+              height: '100vh', 
+              width: '100vw'
+            }}
+          />
 
           {/* Hero Section */}
           <div className="relative overflow-hidden z-10">
