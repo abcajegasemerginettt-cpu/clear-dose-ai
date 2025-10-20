@@ -119,7 +119,7 @@ const Index = () => {
               pixelSize={6}
               color="#FFFFFF"
               patternScale={3}
-              patternDensity={1.2}
+              patternDensity={0.5}
               pixelSizeJitter={0.5}
               enableRipples
               rippleSpeed={0.4}
@@ -164,9 +164,6 @@ const Index = () => {
                 </h1>
                 <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 max-w-3xl mx-auto drop-shadow-lg px-4">
                   Identify tablets and capsules using AI technology
-                </p>
-                <p className="text-xs sm:text-sm text-white/60 max-w-2xl mx-auto px-4">
-                  Currently supports 25+ common medicines • Beta version
                 </p>
               </div>
             </div>

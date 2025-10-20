@@ -237,7 +237,7 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
         {/* Beta Notice */}
         <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
           <p className="text-xs text-blue-700 dark:text-blue-300">
-            <strong>Beta Version:</strong> We're continuously expanding our medicine database. 
+            We're continuously expanding our medicine database. 
             Your feedback helps us prioritize which medicines to add next.
           </p>
         </div>
