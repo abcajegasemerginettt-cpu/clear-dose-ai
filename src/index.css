@@ -109,14 +109,12 @@ All colors MUST be HSL.
 
 @layer utilities {
   .glass-card {
-    @apply backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    @apply backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border border-white/20 dark:border-gray-700/30;
+    box-shadow: var(--shadow-glass);
   }
   
   .glass-button {
-    @apply backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/30;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    @apply backdrop-blur-sm bg-white/10 hover:bg-white/20 border border-white/30;
     transition: var(--transition-smooth);
   }
   

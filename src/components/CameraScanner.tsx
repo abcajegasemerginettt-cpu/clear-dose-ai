@@ -463,7 +463,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
         </div>
         <div className="text-center space-y-1 sm:space-y-2 max-w-sm mx-auto">
           <h3 className="text-base sm:text-lg md:text-xl font-semibold">Ready to Scan</h3>
-          <p className="text-xs sm:text-sm text-white px-2 leading-tight">
+          <p className="text-xs sm:text-sm text-muted-foreground px-2 leading-tight">
             Scan individual tablets or capsules (not bottles or containers)
           </p>
         </div>
@@ -539,7 +539,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
           <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 border-4 border-primary/20 border-t-primary mx-auto"></div>
           <div className="space-y-1">
             <h3 className="text-base sm:text-lg md:text-xl font-semibold">Analyzing Image...</h3>
-            <p className="text-xs sm:text-sm text-white px-2 leading-tight">
+            <p className="text-xs sm:text-sm text-muted-foreground px-2 leading-tight">
               Our AI is classifying your medicine as tablet or capsule
             </p>
           </div>
@@ -571,16 +571,16 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
           
           {scanResult && (
             <div className="space-y-0.5 sm:space-y-1">
-              <p className="text-sm sm:text-base md:text-lg font-medium text-white">
+              <p className="text-sm sm:text-base md:text-lg font-medium text-gray-800 dark:text-gray-200">
                 {scanResult.name}
               </p>
-              <p className="text-xs sm:text-sm text-white">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Confidence: {scanResult.confidence}%
               </p>
             </div>
           )}
           
-          <p className="text-xs sm:text-sm text-white px-1 leading-tight">
+          <p className="text-xs sm:text-sm text-muted-foreground px-1 leading-tight">
             Medicine info displayed on the right. Ask AI for details.
           </p>
         </div>
@@ -618,7 +618,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
             <h3 className="text-base sm:text-lg md:text-xl font-semibold">Scan Complete!</h3>
           </div>
           
-          <p className="text-xs sm:text-sm text-white px-1 leading-tight">
+          <p className="text-xs sm:text-sm text-muted-foreground px-1 leading-tight">
             Medicine not found. Check error details on the right.
           </p>
         </div>

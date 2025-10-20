@@ -34,17 +34,17 @@ export const ConfidenceDisplay = ({ predictions, className = "" }: ConfidenceDis
         <h3 className="text-base sm:text-lg font-semibold">Confidence Comparison</h3>
       </div>
       
-      <p className="text-xs sm:text-sm text-white mb-4">
+      <p className="text-xs sm:text-sm text-muted-foreground mb-4">
         Top 3 possible matches with probabilities:
       </p>
 
       <div className="space-y-3">
         {/* Header */}
         <div className="grid grid-cols-2 gap-4 pb-2 border-b border-border">
-          <div className="text-xs sm:text-sm font-medium text-white">
+          <div className="text-xs sm:text-sm font-medium text-muted-foreground">
             Prediction
           </div>
-          <div className="text-xs sm:text-sm font-medium text-white text-right">
+          <div className="text-xs sm:text-sm font-medium text-muted-foreground text-right">
             Confidence
           </div>
         </div>
@@ -70,7 +70,7 @@ export const ConfidenceDisplay = ({ predictions, className = "" }: ConfidenceDis
                 className={`text-sm sm:text-base font-semibold ${
                   index === 0 
                     ? 'text-green-600 dark:text-green-400' 
-                    : 'text-white'
+                    : 'text-muted-foreground'
                 }`}
               >
                 {prediction.confidence}%
@@ -84,7 +84,7 @@ export const ConfidenceDisplay = ({ predictions, className = "" }: ConfidenceDis
       <div className="mt-4 space-y-2">
         {topPredictions.map((prediction, index) => (
           <div key={index} className="space-y-1">
-            <div className="flex justify-between text-xs text-white">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>{prediction.name}</span>
               <span>{prediction.confidence}%</span>
             </div>

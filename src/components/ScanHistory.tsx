@@ -150,7 +150,7 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
     return (
       <Card className="glass-card p-6">
         <div className="text-center py-8">
-          <p className="text-white">Loading scan history...</p>
+          <p className="text-muted-foreground">Loading scan history...</p>
         </div>
       </Card>
     );
@@ -248,7 +248,7 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
 
       <div className="space-y-3">
         {scans.length === 0 ? (
-          <div className="text-center py-8 text-white">
+          <div className="text-center py-8 text-muted-foreground">
             <p>No scans yet</p>
             <p className="text-sm">Start scanning medicines to see your history here</p>
           </div>
@@ -269,7 +269,7 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
                 )}
                 <div className="flex-1">
                   <h4 className="font-medium">{scan.medicine_name}</h4>
-                  <p className="text-xs text-white">
+                  <p className="text-xs text-muted-foreground">
                     {new Date(scan.scanned_at).toLocaleString()}
                   </p>
                 </div>
@@ -283,7 +283,7 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
                     variant="ghost"
                     size="icon"
                     onClick={() => deleteScan(scan.id)}
-                    className="h-8 w-8 text-white hover:text-destructive"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

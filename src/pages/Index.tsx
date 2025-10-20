@@ -5,7 +5,8 @@ import { ScanHistory } from "@/components/ScanHistory";
 import { ConfidenceDisplay } from "@/components/ConfidenceDisplay";
 import { UnknownMedicineCard } from "@/components/UnknownMedicineCard";
 import { Component as ArtificialHero } from "@/components/ui/artificial-hero";
-import Aurora from "@/components/Aurora";
+import LaserFlow from "@/components/LaserFlow";
+import PixelBlast from "@/components/PixelBlast";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -102,7 +103,7 @@ const Index = () => {
           {/* Overlay button to enter scanner */}
           <button 
             onClick={() => setShowScanner(true)}
-            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[300] backdrop-blur-xl bg-white/10 border border-white/20 text-white hover:bg-white/20 hover:border-white/40 text-sm sm:text-base px-8 py-6 h-auto rounded-full group transition-all flex items-center shadow-lg hover:shadow-xl"
+            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[300] bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:border-white/40 text-sm sm:text-base px-8 py-6 h-auto rounded-full group transition-all flex items-center shadow-lg hover:shadow-xl"
           >
             Start Scanning
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -111,13 +112,46 @@ const Index = () => {
       ) : (
         /* Scanner Interface */
         <>
-          {/* Aurora Background Layer */}
-          <div className="fixed inset-0 z-0" style={{ height: '100vh', width: '100vw', background: 'linear-gradient(to bottom right, #1a1a2e, #0f0f1e, #16213e)' }}>
-            <Aurora
-              colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
-              blend={0.5}
-              amplitude={1.0}
-              speed={0.5}
+          {/* PixelBlast Background Layer */}
+          <div className="fixed inset-0 z-0 bg-black" style={{ height: '100vh', width: '100vw' }}>
+            <PixelBlast
+              variant="circle"
+              pixelSize={6}
+              color="#FFFFFF"
+              patternScale={3}
+              patternDensity={1.2}
+              pixelSizeJitter={0.5}
+              enableRipples
+              rippleSpeed={0.4}
+              rippleThickness={0.12}
+              rippleIntensityScale={1.5}
+              liquid
+              liquidStrength={0.12}
+              liquidRadius={1.2}
+              liquidWobbleSpeed={5}
+              speed={0.6}
+              edgeFade={0.25}
+              transparent
+            />
+          </div>
+
+          {/* Laser Flow Overlay */}
+          <div className="fixed inset-0 z-0 bg-transparent pointer-events-none" style={{ height: '100vh', width: '100vw' }}>
+            <LaserFlow 
+              color="#A50000"
+              horizontalBeamOffset={0.25}
+              verticalBeamOffset={0.0}
+              wispDensity={1.6}
+              wispIntensity={8.0}
+              wispSpeed={14.0}
+              flowStrength={0.5}
+              verticalSizing={3.2}
+              horizontalSizing={0.4}
+              fogIntensity={0.8}
+              fogScale={0.28}
+              fogFallSpeed={1.0}
+              decay={0.9}
+              falloffStart={2.2}
             />
           </div>
 
@@ -128,10 +162,10 @@ const Index = () => {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white drop-shadow-2xl">
                   MedLens AI
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto drop-shadow-lg px-4">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 max-w-3xl mx-auto drop-shadow-lg px-4">
                   Identify tablets and capsules using AI technology
                 </p>
-                <p className="text-xs sm:text-sm text-white max-w-2xl mx-auto px-4">
+                <p className="text-xs sm:text-sm text-white/60 max-w-2xl mx-auto px-4">
                   Currently supports 25+ common medicines • Beta version
                 </p>
               </div>
@@ -178,17 +212,17 @@ const Index = () => {
           </div>
 
           {/* Footer */}
-          <footer className="relative z-10 backdrop-blur-xl bg-white/5 border-t border-white/10 mt-8 sm:mt-12 md:mt-16">
+          <footer className="relative z-10 backdrop-blur-md bg-black/30 border-t border-white/10 mt-8 sm:mt-12 md:mt-16">
             <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
               <div className="text-center space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-center gap-2">
                   <Smartphone className="h-4 sm:h-5 w-4 sm:w-5 text-white" />
                   <span className="font-semibold text-white text-sm sm:text-base">MedLens AI</span>
                 </div>
-                <p className="text-xs sm:text-sm text-white">
+                <p className="text-xs sm:text-sm text-white/70">
                   © 2025 MedLens AI. All rights reserved.
                 </p>
-                <p className="text-xs text-white max-w-2xl mx-auto px-4">
+                <p className="text-xs text-white/50 max-w-2xl mx-auto px-4">
                   <strong>Disclaimer:</strong> This app is for informational purposes only. 
                   Always consult healthcare professionals for medical advice.
                 </p>

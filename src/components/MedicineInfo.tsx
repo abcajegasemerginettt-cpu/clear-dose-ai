@@ -63,11 +63,11 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
       <Card className="glass-card p-8">
         <div className="flex flex-col items-center text-center gap-4">
           <div className="rounded-full bg-muted p-4">
-            <Pill className="h-12 w-12 text-white" />
+            <Pill className="h-12 w-12 text-muted-foreground" />
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">No Medicine Scanned Yet</h3>
-            <p className="text-sm text-white">
+            <p className="text-sm text-muted-foreground">
               Start your camera and scan a tablet or capsule to see its information here
             </p>
           </div>
@@ -86,7 +86,7 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-xl sm:text-2xl font-bold break-words">{medicine.name}</h3>
-              <p className="text-xs sm:text-sm text-white break-words">{medicine.generic_name}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground break-words">{medicine.generic_name}</p>
               {medicine.name !== 'Not a medicine' && (
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className="bg-primary/10 text-primary border-primary/20">
@@ -138,7 +138,7 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             <Info className="h-4 w-4 text-primary" />
             <h4 className="font-semibold">Description</h4>
           </div>
-          <p className="text-sm text-white leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed">
             {medicine.description}
           </p>
         </div>
@@ -148,7 +148,7 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             <Info className="h-4 w-4 text-primary" />
             <h4 className="font-semibold">Variants</h4>
           </div>
-          <ul className="text-sm text-white space-y-1">
+          <ul className="text-sm text-muted-foreground space-y-1">
             {medicine.variants.map((variant, index) => (
               <li key={index} className="flex items-start gap-2">
                 <span className="text-primary mt-1">•</span>
@@ -163,7 +163,7 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             <Info className="h-4 w-4 text-primary" />
             <h4 className="font-semibold">Storage</h4>
           </div>
-          <p className="text-sm text-white">
+          <p className="text-sm text-muted-foreground">
             {medicine.storage}
           </p>
         </div>
@@ -177,7 +177,7 @@ export const MedicineInfo = ({ medicine, classifiedType }: MedicineInfoProps) =>
             {medicine.side_effects.map((effect, index) => (
               <li 
                 key={index}
-                className="text-sm text-white flex items-start gap-2"
+                className="text-sm text-muted-foreground flex items-start gap-2"
               >
                 <span className="text-destructive mt-1">•</span>
                 <span>{effect}</span>
