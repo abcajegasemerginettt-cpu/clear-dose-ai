@@ -349,11 +349,11 @@
   },
   {
     "id": 23,
-    "name": "Cetirizine",
+    "name": "Gotirizine",
     "generic_name": "Cetirizine HCl",
     "description": "Antihistamine for allergic reactions and hay fever.",
     "medicine_type": "tablet",
-    "variants": ["Cetirizine 10mg"],
+    "variants": ["Gotirizine 10mg"],
     "side_effects": [
       "Drowsiness",
       "Fatigue",

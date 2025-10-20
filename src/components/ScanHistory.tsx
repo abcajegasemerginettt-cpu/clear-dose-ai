@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Download, Trash2, FileText, FileSpreadsheet, CheckSquare, Square } from "lucide-react";
+import { Clock, Download, Trash2, FileText, FileSpreadsheet, CheckSquare, Square, ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,13 +25,28 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
   const [loading, setLoading] = useState(true);
   const [selectedScans, setSelectedScans] = useState<Set<string>>(new Set());
   const [isSelectMode, setIsSelectMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const itemsPerPage = 10;
 
-  const fetchScanHistory = async () => {
+  const fetchScanHistory = async (page: number = currentPage) => {
     try {
+      setLoading(true);
+      
+      // First get the total count
+      const { count } = await (supabase as any)
+        .from('scan_history')
+        .select('*', { count: 'exact', head: true });
+      
+      setTotalCount(count || 0);
+      
+      // Then get the paginated data
+      const offset = (page - 1) * itemsPerPage;
       const { data, error } = await (supabase as any)
         .from('scan_history')
         .select('*')
-        .order('scanned_at', { ascending: false });
+        .order('scanned_at', { ascending: false })
+        .range(offset, offset + itemsPerPage - 1);
 
       if (error) throw error;
       setScans(data || []);
@@ -50,9 +65,15 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
   // Refresh when refreshTrigger changes (new scan completed)
   useEffect(() => {
     if (refreshTrigger && refreshTrigger > 0) {
-      fetchScanHistory();
+      fetchScanHistory(1); // Reset to first page when new scan is added
+      setCurrentPage(1);
     }
   }, [refreshTrigger]);
+
+  // Fetch data when page changes
+  useEffect(() => {
+    fetchScanHistory(currentPage);
+  }, [currentPage]);
 
   const deleteScan = async (id: string) => {
     try {
@@ -63,7 +84,15 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
 
       if (error) throw error;
       
-      setScans(scans.filter(scan => scan.id !== id));
+      // Check if this was the last item on the current page
+      const newScans = scans.filter(scan => scan.id !== id);
+      if (newScans.length === 0 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        setScans(newScans);
+        setTotalCount(totalCount - 1);
+      }
+      
       toast.success("Scan deleted successfully");
     } catch (error) {
       console.error("Error deleting scan:", error);
@@ -85,7 +114,15 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
 
       if (error) throw error;
       
-      setScans(scans.filter(scan => !selectedScans.has(scan.id)));
+      // Check if this will leave the current page empty
+      const newScans = scans.filter(scan => !selectedScans.has(scan.id));
+      if (newScans.length === 0 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        setScans(newScans);
+        setTotalCount(totalCount - selectedScans.size);
+      }
+      
       setSelectedScans(new Set());
       setIsSelectMode(false);
       toast.success(`${selectedScans.size} scan(s) deleted successfully`);
@@ -144,6 +181,29 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
     }
     
     toast.success(`Data exported as ${format.toUpperCase()}`);
+  };
+
+  // Pagination helper functions
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+  const hasNextPage = currentPage < totalPages;
+  const hasPrevPage = currentPage > 1;
+
+  const goToNextPage = () => {
+    if (hasNextPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (hasPrevPage) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   if (loading) {
@@ -293,6 +353,66 @@ export const ScanHistory = ({ refreshTrigger }: ScanHistoryProps) => {
           ))
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {totalCount > itemsPerPage && (
+        <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
+          <div className="text-sm text-muted-foreground">
+            Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalCount)} of {totalCount} scans
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToPrevPage}
+              disabled={!hasPrevPage}
+              className="gap-1"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+            
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNumber;
+                if (totalPages <= 5) {
+                  pageNumber = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNumber = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNumber = totalPages - 4 + i;
+                } else {
+                  pageNumber = currentPage - 2 + i;
+                }
+                
+                return (
+                  <Button
+                    key={pageNumber}
+                    variant={currentPage === pageNumber ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => goToPage(pageNumber)}
+                    className="w-8 h-8 p-0"
+                  >
+                    {pageNumber}
+                  </Button>
+                );
+              })}
+            </div>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToNextPage}
+              disabled={!hasNextPage}
+              className="gap-1"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </Card>
   );
 };
