@@ -436,7 +436,7 @@ export const CameraScanner = ({ onScanComplete, onSuggestionsReady, onScanReset,
                 </div>
                 <ul className="text-xs text-black/90 space-y-1">
                   <li>• Scan individual tablets/capsules, not bottles</li>
-                  <li>• Use blister pack backs or place pill on surface</li>
+                  <li>• For accurate results, scan the back packaging where the medicine label is visible</li>
                   <li>• Center the medicine in the frame</li>
                   <li>• Ensure good lighting (avoid shadows)</li>
                 </ul>

@@ -102,9 +102,9 @@ export const UnknownMedicineCard = ({ error, onRetry }: UnknownMedicineCardProps
   const getDescription = () => {
     switch (error.type) {
       case 'not_found':
-        return `We couldn't find "${error.medicineName}" in our current database of 25+ medicines. This medicine might not be supported yet.`;
+        return `We couldn't find this medicine in our current database of 25+ medicines. This medicine might not be supported yet.`;
       case 'low_confidence':
-        return `This medicine is not currently supported by our AI model. We need to train our system to recognize this specific medicine for accurate identification.`;
+        return `Our AI model requires at least 70% confidence to accurately identify a medicine. This medicine is not currently supported by our AI model and needs to be added to our training data for reliable identification.`;
       default:
         return error.message;
     }
