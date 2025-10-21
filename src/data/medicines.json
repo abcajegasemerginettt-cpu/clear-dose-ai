@@ -5,7 +5,7 @@
     "generic_name": "Phenylephrine HCl + Chlorphenamine Maleate + Paracetamol",
     "description": "Multi-symptom relief for flu, fever, body aches, nasal congestion and post-nasal drip.",
     "medicine_type": "tablet",
-    "variants": ["Bioflu Tablet 500 mg (10/2/500 mg)"],
+    "variants": ["Bioflu Tablet 500 mg "],
     "side_effects": [
       "Drowsiness",
       "Dizziness",
@@ -23,10 +23,10 @@
     "description": "Relief from symptoms of common cold, sinusitis, flu, and other minor respiratory tract infections.",
     "medicine_type": "tablet",
     "variants": [
-      "Neozep Z+ Non-Drowsy (tablet)",
-      "Neozep Z+ Forte (tablet, with zinc)",
-      "Neozep Syrup (children)",
-      "Neozep Drops (pediatric drops)"
+      "Neozep Z+ Non-Drowsy",
+      "Neozep Z+ Forte",
+      "Neozep Syrup",
+      "Neozep Drops"
     ],
     "side_effects": [
       "Drowsiness",
@@ -43,7 +43,7 @@
     "generic_name": "Paracetamol",
     "description": "Used to relieve mild to moderate pain and reduce fever.",
     "medicine_type": "tablet",
-    "variants": ["Biogesic Tablet 500mg", "Biogesic Forte 650mg", "Biogesic Syrup for Kids"],
+    "variants": ["Biogesic Tablet 500mg", "Biogesic Syrup for Kids"],
     "side_effects": [
       "Nausea",
       "Stomach upset",
