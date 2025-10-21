@@ -31,6 +31,13 @@ class GoogleAIService {
 
   async askAboutMedicine(question: string, medicine: Medicine): Promise<string> {
     try {
+      // First, check if the question is medicine-related
+      const isRelevantQuestion = await this.isMedicineRelatedQuestion(question, medicine);
+      
+      if (!isRelevantQuestion) {
+        return "I'm a medical AI assistant designed to help with questions about medicines and healthcare. Please ask me something related to the scanned medicine, its usage, side effects, dosage, interactions, or general medical topics.";
+      }
+
       const medicineContext = `
         Medicine Information:
         - Name: ${medicine.name}
@@ -52,17 +59,18 @@ class GoogleAIService {
         User Question: ${question}
         
         Instructions:
-        1. Answer ONLY what the user specifically asked about - don't provide unrequested information
-        2. Be concise and focused on their specific question
-        3. If they ask about side effects, provide additional side effects beyond what's listed, but don't include dosage, interactions, etc. unless asked
-        4. If they ask about dosage, focus only on dosage information
-        5. Use bullet points for lists when appropriate
-        6. Keep responses helpful but brief - around 3-5 sentences or a short bulleted list
-        7. Only include a healthcare professional disclaimer when discussing dosage, drug interactions, contraindications, or serious medical advice
-        8. For general informational questions (like "what is this medicine for?"), skip the disclaimer
-        9. Use your medical knowledge to enhance the answer but stay focused on the specific question
+        1. If the user is greeting you (hi, hello, how are you, how can you help, etc.), respond naturally and friendly, then offer to help with questions about the scanned medicine or general medical topics
+        2. Answer ONLY what the user specifically asked about - don't provide unrequested information
+        3. Be concise and focused on their specific question
+        4. If they ask about side effects, provide additional side effects beyond what's listed, but don't include dosage, interactions, etc. unless asked
+        5. If they ask about dosage, focus only on dosage information
+        6. Use bullet points for lists when appropriate
+        7. Keep responses helpful but brief - around 3-5 sentences or a short bulleted list
+        8. Only include a healthcare professional disclaimer when discussing dosage, drug interactions, contraindications, or serious medical advice
+        9. For general informational questions (like "what is this medicine for?"), skip the disclaimer
+        10. Use your medical knowledge to enhance the answer but stay focused on the specific question
         
-        Remember: Answer only what they asked, be concise, and only add disclaimers for medical advice that requires professional consultation.
+        Remember: Be conversational for greetings, answer only what they asked, be concise, and only add disclaimers for medical advice that requires professional consultation.
       `;
 
       // Add timeout to prevent hanging requests
@@ -83,6 +91,47 @@ class GoogleAIService {
         throw new Error('AI response is taking too long. Please try again with a shorter question.');
       }
       throw new Error('Failed to get response from AI assistant. Please try again.');
+    }
+  }
+
+  private async isMedicineRelatedQuestion(question: string, medicine: Medicine): Promise<boolean> {
+    try {
+      const prompt = `
+        You are a question classifier. Your job is to determine if a user's question is related to medicine, healthcare, pharmaceuticals, or medical topics.
+
+        The user has scanned this medicine: ${medicine.name} (${medicine.generic_name})
+        
+        User Question: "${question}"
+        
+        Determine if this question is related to:
+        - The scanned medicine specifically
+        - Medicine/pharmaceuticals in general
+        - Healthcare topics
+        - Medical conditions or symptoms
+        - Drug interactions, side effects, dosage
+        - Health and wellness topics
+        - Basic greetings and conversational starters (hi, hello, how are you, how can you help, what can you do, etc.)
+        
+        Questions NOT related to medicine include:
+        - Technology questions (unless medical technology)
+        - Sports, entertainment, politics
+        - Math, science (non-medical)
+        - Personal life questions unrelated to health
+        - Weather, travel, food (unless health-related)
+        - Complex non-medical conversations
+        
+        Respond with ONLY "YES" if the question is medicine/health related OR a basic greeting/conversational starter, or "NO" if it's not.
+      `;
+
+      const result = await this.model.generateContent(prompt);
+      const response = await result.response;
+      const answer = response.text().trim().toUpperCase();
+      
+      return answer === 'YES';
+    } catch (error) {
+      console.error('Error checking question relevance:', error);
+      // If we can't determine relevance, err on the side of caution and allow the question
+      return true;
     }
   }
 
