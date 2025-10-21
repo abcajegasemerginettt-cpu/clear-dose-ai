@@ -3,9 +3,9 @@
     "id": 1,
     "name": "Bioflu",
     "generic_name": "Phenylephrine HCl + Chlorphenamine Maleate + Paracetamol",
-    "description": "Multi-symptom relief for flu, fever, body aches, and nasal congestion.",
+    "description": "Multi-symptom relief for flu, fever, body aches, nasal congestion and post-nasal drip.",
     "medicine_type": "tablet",
-    "variants": ["Bioflu Tablet"],
+    "variants": ["Bioflu Tablet 500 mg (10/2/500 mg)"],
     "side_effects": [
       "Drowsiness",
       "Dizziness",
@@ -22,10 +22,14 @@
     "generic_name": "Phenylephrine HCl + Chlorphenamine Maleate + Paracetamol",
     "description": "Relief from symptoms of common cold, sinusitis, flu, and other minor respiratory tract infections.",
     "medicine_type": "tablet",
-    "variants": ["Neozep Tablet", "Neozep Forte"],
+    "variants": [
+      "Neozep Z+ Non-Drowsy (tablet)",
+      "Neozep Z+ Forte (tablet, with zinc)",
+      "Neozep Syrup (children)",
+      "Neozep Drops (pediatric drops)"
+    ],
     "side_effects": [
       "Drowsiness",
-      "Blurred vision",
       "Dry mouth",
       "Nausea",
       "Dizziness"
