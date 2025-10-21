@@ -154,6 +154,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ by the MedLens AI Team**
 
-[⭐ Star this repo](https://github.com/abcajegasemerginettt-cpu/clear-dose-ai) • [🐛 Report Issues](https://github.com/abcajegasemerginettt-cpu/clear-dose-aiissues) • [💬 Discussions](https://github.com/abcajegasemerginettt-cpu/clear-dose-aidiscussions)
+[⭐ Star this repo](https://github.com/abcajegasemerginettt-cpu/clear-dose-ai) • [🐛 Report Issues](https://github.com/abcajegasemerginettt-cpu/clear-dose-ai/issues) • [💬 Discussions](https://github.com/abcajegasemerginettt-cpu/clear-dose-ai/discussions)
 
 </div>
